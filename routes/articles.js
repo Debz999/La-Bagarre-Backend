@@ -24,7 +24,11 @@ router.post('/postArticle', (req, res) => {
     //Sans ca on a pas des couleurs ou photos en objts individuels
     const colorsArray = Array.isArray(colors) ? colors.map(color => ({ name: color })) : colors.split(', ').map(color => ({ name: color.trim() }));
     const photosArray = Array.isArray(photos) ? photos.map(photo => ({ url: photo })) : photos.split(', ').map(photo => ({ url: photo.trim() }));
-
+    Vérification : Array.isArray(colors)
+        // Si colors est déjà un tableau, on le mappe (.map()) en transformant chaque élément en un objet { name: color }.
+        // Sinon, on suppose que colors est une chaîne de caractères contenant des couleurs séparées par , (exemple : "red, blue, green").
+        // On utilise .split(', ') pour la découper en un tableau.
+        // Puis .map(color => ({ name: color.trim() })) crée des objets { name: color }.
     const newArticle = new Article({
         type,
         model,
