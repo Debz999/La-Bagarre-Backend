@@ -14,7 +14,9 @@ const articleSchema = mongoose.Schema({
     // colors: [String], // Tableau de chaînes de caractères
 	// photos: [String], // Tableau de chaînes de caractères
     price: Number,
-    onSale: Boolean, //Pour pouvoir filtrer les articles en promos seulement
+    onSale: Boolean, //Pour pouvoir filtrer les articles en promos seulement //Doit être false par defaut
+    soldCount: Number, 
+    //FAUT METTRE DEFAULT FALSE POUR ONSALE     
     //il faut aussi un soldCount pour la catégorie articles les plus vendus
 });
 
