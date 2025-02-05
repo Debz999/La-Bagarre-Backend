@@ -9,6 +9,7 @@ const articleSchema = mongoose.Schema({
     giSizes: [{ giSize0: String }],
     colors: [{ colorName0: String }],  // ✅ Chaque couleur est un objet { name: "Rouge" }
     photos: [{ photoUrl0: String }],   // ✅ Chaque photo est un objet { url: "image1.jpg" }
+    cardPhoto: String,
 	// // colors: [{String}], //Synthaxe pas bonne
 	// // photos: [{String}], //Synthaxe pas bonne
     // colors: [String], // Tableau de chaînes de caractères

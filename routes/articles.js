@@ -128,7 +128,7 @@ router.get('/articlesOnSales', (req, res) => {
 //http://localhost:3000/articles/postArticle
 //Route post pour ajouter des articles en BDD surement accessible depuis un role ADMIN
 router.post('/postArticle', (req, res) => {
-    const { categorie, type, model, description, sizes, giSizes, colors, photos, price } = req.body;
+    const { categorie, type, model, description, sizes, giSizes, colors, photos, cardPhoto, price } = req.body;
 
     //Bon ca marche mais va falloir expliquer le split et le trim
     //Sans ca on a pas des couleurs ou photos en objts individuels
@@ -150,6 +150,7 @@ router.post('/postArticle', (req, res) => {
         giSizes: giSizesArray,
         colors: colorsArray, 
         photos: photosArray,
+        cardPhoto,
         price,
     });
     newArticle.save().then(()=> {
