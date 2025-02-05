@@ -6,7 +6,7 @@ const Article = require("../models/articles")
 
 /* GET all carts. */
 router.get("/", function (req, res, next) {
-  Cart.find().then((data) => {
+  Cart.find().populate("items.article").then((data) => {
     console.log(data);
     res.json({ data });
   });
