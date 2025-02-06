@@ -1,18 +1,24 @@
 const mongoose = require('mongoose');
 
 const articleSchema = mongoose.Schema({
+    categorie: String,
 	type: String,
 	model: String,
     description: String,
-	size: String,
-    giSize: String,
-    colors: [{ name: String }],  // ✅ Chaque couleur est un objet { name: "Rouge" }
-    photos: [{ url: String }],   // ✅ Chaque photo est un objet { url: "image1.jpg" }
+	sizes: [{ size0: String }],
+    giSizes: [{ giSize0: String }],
+    colors: [{ colorName0: String }],  // ✅ Chaque couleur est un objet { name: "Rouge" }
+    photos: [{ photoUrl0: String }],   // ✅ Chaque photo est un objet { url: "image1.jpg" }
+    cardPhoto: String,
 	// // colors: [{String}], //Synthaxe pas bonne
 	// // photos: [{String}], //Synthaxe pas bonne
     // colors: [String], // Tableau de chaînes de caractères
 	// photos: [String], // Tableau de chaînes de caractères
     price: Number,
+    onSale: Boolean, //Pour pouvoir filtrer les articles en promos seulement //Doit être false par defaut
+    soldCount: Number, 
+    //FAUT METTRE DEFAULT FALSE POUR ONSALE     
+    //il faut aussi un soldCount pour la catégorie articles les plus vendus
 });
 
 const Article = mongoose.model('articles', articleSchema);
