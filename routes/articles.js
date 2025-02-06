@@ -125,33 +125,47 @@ router.get('/articlesOnSales', (req, res) => {
     });
 });
 
-//http://localhost:3000/articles/postArticle
-//Route post pour ajouter des articles en BDD surement accessible depuis un role ADMIN
-router.post('/postArticle', (req, res) => {
-    const { categorie, type, model, description, sizes, giSizes, colors, photos, cardPhoto, price } = req.body;
 
-    //Bon ca marche mais va falloir expliquer le split et le trim
-    //Sans ca on a pas des couleurs ou photos en objts individuels
-    const colorsArray = Array.isArray(colors) ? colors.map(color => ({ colorName0: color })) : colors.split(', ').map(color => ({ colorName0: color.trim() }));
-    const photosArray = Array.isArray(photos) ? photos.map(photo => ({ photoUrl0: photo })) : photos.split(', ').map(photo => ({ photoUrl0: photo.trim() }));
-    const sizesArray = Array.isArray(sizes) ? sizes.map(size => ({ size0: size })) : sizes.split(', ').map(size => ({ size0: size.trim() }));
-    const giSizesArray = Array.isArray(giSizes) ? giSizes.map(giSize => ({ giSize0: giSize })) : giSizes.split(', ').map(giSize => ({ giSize0: giSize.trim() }));
-        // Vérification : Array.isArray(colors)
-        // Si colors est déjà un tableau, on le mappe (.map()) en transformant chaque élément en un objet { name: color }.
-        // Sinon, on suppose que colors est une chaîne de caractères contenant des couleurs séparées par , (exemple : "red, blue, green").
-        // On utilise .split(', ') pour la découper en un tableau.
-        // Puis .map(color => ({ name: color.trim() })) crée des objets { name: color }.
+
+// router.get('/:id', (req, res) => {
+//     const article = Article.findById(req.params.id).then(data => {
+//         res.json({ result: true, articleRécupéré: data })
+//     });
+    
+//     console.log(article)
+// })
+
+router.get('/:id', (req, res) => {
+    Article.findById(req.params.id).then((data) => {
+        res.json({ result: true, articleRécupéré: data });
+    })
+})
+//Il me faut aussi une route post pour ajouter dans la bdd cart
+//Ici tout s'ajoute sur la bdd articles
+//Comment faire pour ajouter dans la bdd cart depuis la bdd articles..
+
+router.post('/postArticle1', (req, res) => {
+    const { categorie, type, model, description, cardPhoto, price, sizes9, giSizes9, colors9, photos9 } = req.body;
+
+
+
+    const colorsArray9 = colors9.split(', ');
+    const photosArray9 = photos9.split(', ');
+    const sizesArray9 = sizes9.split(', ');
+    const giSizesArray9 = giSizes9.split(', ');
+
+
     const newArticle = new Article({
         categorie,
         type,
         model,
         description,
-        sizes: sizesArray,
-        giSizes: giSizesArray,
-        colors: colorsArray, 
-        photos: photosArray,
         cardPhoto,
         price,
+        colors9: colorsArray9,
+        photos9: photosArray9,
+        sizes9: sizesArray9,
+        giSizes9: giSizesArray9,
     });
     newArticle.save().then(()=> {
         console.log("Article saved")
@@ -159,12 +173,40 @@ router.post('/postArticle', (req, res) => {
     });
 });
 
-
-//Il me faut aussi une route post pour ajouter dans la bdd cart
-//Ici tout s'ajoute sur la bdd articles
-//Comment faire pour ajouter dans la bdd cart depuis la bdd articles..
-
-
-
    
 module.exports = router;
+
+
+// //http://localhost:3000/articles/postArticle
+// //Route post pour ajouter des articles en BDD surement accessible depuis un role ADMIN
+// router.post('/postArticle', (req, res) => {
+//     const { categorie, type, model, description, sizes, giSizes, colors, photos, cardPhoto, price } = req.body;
+
+//     //Bon ca marche mais va falloir expliquer le split et le trim
+//     //Sans ca on a pas des couleurs ou photos en objts individuels
+//     const colorsArray = Array.isArray(colors) ? colors.map(color => ({ colorName0: color })) : colors.split(', ').map(color => ({ colorName0: color.trim() }));
+//     const photosArray = Array.isArray(photos) ? photos.map(photo => ({ photoUrl0: photo })) : photos.split(', ').map(photo => ({ photoUrl0: photo.trim() }));
+//     const sizesArray = Array.isArray(sizes) ? sizes.map(size => ({ size0: size })) : sizes.split(', ').map(size => ({ size0: size.trim() }));
+//     const giSizesArray = Array.isArray(giSizes) ? giSizes.map(giSize => ({ giSize0: giSize })) : giSizes.split(', ').map(giSize => ({ giSize0: giSize.trim() }));
+//         // Vérification : Array.isArray(colors)
+//         // Si colors est déjà un tableau, on le mappe (.map()) en transformant chaque élément en un objet { name: color }.
+//         // Sinon, on suppose que colors est une chaîne de caractères contenant des couleurs séparées par , (exemple : "red, blue, green").
+//         // On utilise .split(', ') pour la découper en un tableau.
+//         // Puis .map(color => ({ name: color.trim() })) crée des objets { name: color }.
+//     const newArticle = new Article({
+//         categorie,
+//         type,
+//         model,
+//         description,
+//         sizes: sizesArray,
+//         giSizes: giSizesArray,
+//         colors: colorsArray, 
+//         photos: photosArray,
+//         cardPhoto,
+//         price,
+//     });
+//     newArticle.save().then(()=> {
+//         console.log("Article saved")
+//         res.json({ result: true })
+//     });
+// });

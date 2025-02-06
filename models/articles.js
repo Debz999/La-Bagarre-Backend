@@ -5,15 +5,11 @@ const articleSchema = mongoose.Schema({
 	type: String,
 	model: String,
     description: String,
-	sizes: [{ size0: String }],
-    giSizes: [{ giSize0: String }],
-    colors: [{ colorName0: String }],  // ✅ Chaque couleur est un objet { name: "Rouge" }
-    photos: [{ photoUrl0: String }],   // ✅ Chaque photo est un objet { url: "image1.jpg" }
     cardPhoto: String,
-	// // colors: [{String}], //Synthaxe pas bonne
-	// // photos: [{String}], //Synthaxe pas bonne
-    // colors: [String], // Tableau de chaînes de caractères
-	// photos: [String], // Tableau de chaînes de caractères
+    sizes9: [String],
+    giSizes9: [String],
+    colors9: [String], // Tableau de chaînes de caractères
+	photos9: [String], // Tableau de chaînes de caractères
     price: Number,
     onSale: Boolean, //Pour pouvoir filtrer les articles en promos seulement //Doit être false par defaut
     soldCount: Number, 
@@ -24,3 +20,8 @@ const articleSchema = mongoose.Schema({
 const Article = mongoose.model('articles', articleSchema);
 
 module.exports = Article;
+
+// sizes: [{ size0: String }],
+// giSizes: [{ giSize0: String }],
+// colors: [{ colorName0: String }],  // ✅ Chaque couleur est un objet { name: "Rouge" }
+// photos: [{ photoUrl0: String }],   // ✅ Chaque photo est un objet { url: "image1.jpg" }
