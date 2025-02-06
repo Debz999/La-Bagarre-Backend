@@ -15,9 +15,9 @@ router.get("/", function (req, res, next) {
     });
 });
 
-/* GET user cart. */
+/* GET user cart.  */
 router.get("/:_id", function (req, res, next) {
-  Cart.findById(req.params._id)
+  Cart.findOne({ownerOfCart: req.params._id})
     .populate("items.article")
     .then((data) => {
       console.log(data);
