@@ -145,7 +145,7 @@ router.get('/:id', (req, res) => {
 //Comment faire pour ajouter dans la bdd cart depuis la bdd articles..
 
 router.post('/postArticle1', (req, res) => {
-    const { categorie, type, model, description, cardPhoto, price, sizes9, giSizes9, colors9, photos9 } = req.body;
+    const { categorie, type, model, description, price, sizes9, giSizes9, colors9, photos9, onSale, soldCount } = req.body;
 
 
 
@@ -160,7 +160,6 @@ router.post('/postArticle1', (req, res) => {
         type,
         model,
         description,
-        cardPhoto,
         price,
         colors9: colorsArray9,
         photos9: photosArray9,
@@ -172,6 +171,12 @@ router.post('/postArticle1', (req, res) => {
         res.json({ result: true })
     });
 });
+
+
+//FAUDRA AUSSI UNE ROUTE PUT POUR MODIFIER LE soldCount en bdd
+//soldCount++ shai pas si ca marche mdr à test
+//
+
 
    
 module.exports = router;

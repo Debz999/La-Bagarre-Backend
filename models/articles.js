@@ -5,7 +5,7 @@ const articleSchema = mongoose.Schema({
 	type: String,
 	model: String,
     description: String,
-    cardPhoto: String,
+    // cardPhoto: String,
     sizes9: [String],
     giSizes9: [String],
     colors9: [String], // Tableau de chaînes de caractères
