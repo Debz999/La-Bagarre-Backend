@@ -127,22 +127,11 @@ router.get('/articlesOnSales', (req, res) => {
 
 
 
-// router.get('/:id', (req, res) => {
-//     const article = Article.findById(req.params.id).then(data => {
-//         res.json({ result: true, articleRécupéré: data })
-//     });
-    
-//     console.log(article)
-// })
-
 router.get('/:id', (req, res) => {
     Article.findById(req.params.id).then((data) => {
         res.json({ result: true, articleRécupéré: data });
     })
 })
-//Il me faut aussi une route post pour ajouter dans la bdd cart
-//Ici tout s'ajoute sur la bdd articles
-//Comment faire pour ajouter dans la bdd cart depuis la bdd articles..
 
 router.post('/postArticle1', (req, res) => {
     const { categorie, type, model, description, price, sizes9, giSizes9, colors9, photos9, onSale, soldCount } = req.body;
