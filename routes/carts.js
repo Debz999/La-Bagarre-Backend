@@ -2,7 +2,7 @@ var express = require("express");
 var router = express.Router();
 
 const Cart = require("../models/carts");
-const Article = require("../models/articles");
+const User = require("../models/users");
 
 //HERE INCLUDE USER ADDRESS TO ONLY GET THE PERTNENT CART
 /* GET all carts. */
@@ -15,25 +15,34 @@ router.get("/", function (req, res, next) {
     });
 });
 
+// router.get('/:token', function (req, res) {
+// User.findOne({token: req.params.token})
+// .then((data) => {
+//   res.json({data});
+// })
+// })
+
 /* GET user cart.  */
-router.get("/:_id", function (req, res, next) {
-  Cart.findOne({ownerOfCart: req.params._id})
-    .populate("items.article")
-    .then((data) => {
-      console.log(data);
-      res.json({ data });
-    });
+router.get("/:token", function (req, res, next) {
+  User.findOne({ token: req.params.token }).then((data) => {
+    console.log(data);
+    Cart.findOne({ ownerOfCart: data._id })
+      .populate("items.article")
+      .then((data) => {
+        console.log(data);
+        res.json({ data });
+      });
+  });
 });
 
 /* POST  new cart items*/
-router.post("/post/:_id", (req, res) => {
-  const userId = req.params._id;
+router.post("/post/:token", (req, res) => {
   const articleId = req.body._id;
   const quantityNum = req.body.quantity;
 
-  function createNewCart() {
+  function createNewCart(user) {
     const newCart = new Cart({
-      ownerOfCart: userId,
+      ownerOfCart: user._id,
       items: [
         {
           quantity: req.body.quantity,
@@ -46,8 +55,8 @@ router.post("/post/:_id", (req, res) => {
     });
   }
 
-  function editCart() {
-    Cart.findOne({ ownerOfCart: userId }).then((userCartDB) => {
+  function editCart(user) {
+    Cart.findOne({ ownerOfCart: user._id }).then((userCartDB) => {
       //Info userCartDB has items and ownerOfCart
       if (userCartDB.items.find((e) => e.article == articleId)) {
         //if articleId found, edit quantity
@@ -67,35 +76,42 @@ router.post("/post/:_id", (req, res) => {
       });
     });
   }
-  Cart.findOne({ ownerOfCart: userId }).then((cartFromDB) => {
-    if (!cartFromDB) {
-      createNewCart();
-    } else {
-      editCart();
-    }
+
+  User.findOne({ token: req.params.token }).then((user) => {
+    console.log(user);
+    //res.json({user})
+    Cart.findOne({ ownerOfCart: user._id }).then((cartFromDB) => {
+      if (!cartFromDB) {
+        createNewCart(user);
+      } else {
+        editCart(user);
+      }
+    });
   });
 });
 
-/* DELETE   item from cart using id*/
-router.delete("/:_id", (req, res) => {
-  const userId = req.params._id;
+/* DELETE   item from cart using id*/ //test once i've added several carts
+
+router.delete("/:token", (req, res) => {
   const articleId = req.body._id;
-  Cart.findOne({ ownerOfCart: userId })
-    .then((cartFromDB) => {
+  User.findOne({ token: req.params.token }).then((user) => {
+    console.log(user);
+    Cart.findOne({ ownerOfCart: user._id }).then((cartFromDB) => {
       if (cartFromDB.items.find((e) => e.article == articleId)) {
         //console.log(cartFromDB);
         //filter would've worked too with cartFromDB.items = cartFromDB.items.filter...
         const index = cartFromDB.items.findIndex((e) => e.article == articleId);
         console.log("index", index);
         cartFromDB.items.splice(index, 1);
-        console.log('working')
+        console.log("working");
       } else {
-       console.log('error')
+        console.log("error");
       }
       cartFromDB.save().then(() => {
         res.json({ result: true, message: "cart article removed" });
-    })
+      });
     });
+  });
 });
 
 //save it just in case i need to delete the entire cart
