@@ -22,6 +22,28 @@ router.get('/articlesHommes1', (req, res) => {
       });
 });
 
+//Route articles similaires en cour
+//maarche ap 
+// router.get('/relatedArticles/:categorie', (req, res) => {
+//     const { categorie } = req.params;
+  
+//     // Cherche tous les articles ayant la même catégorie
+//     Article.find({ categorie: categorie })
+//       .then((data) => {
+//         res.json({ result: true, relatedArticles: data });
+//       })
+// })
+
+router.get('/articlesSimililaires', (req, res) => {
+    const { categorie, type } = req.query;
+  
+    // Cherche tous les articles ayant la même catégorie
+    Article.find({ categorie: categorie, type: type })
+      .then((data) => {
+        res.json({ result: true, relatedArticles: data });
+      })
+})
+
 //http://localhost:3000/articles/articlesHommes
 router.get('/articlesHommes', (req, res) => {
     Article.find({ categorie: "Homme"}).then(data => {
@@ -144,11 +166,11 @@ router.get('/:id', (req, res) => {
 })
 
 
-router.get('/:id', (req, res) => {
-    Article.findById(req.params.id).then((data) => {
-        res.json({ result: true, articleRécupéré: data });
-    })
-})
+// router.get('/:id', (req, res) => {
+//     Article.findById(req.params.id).then((data) => {
+//         res.json({ result: true, articleRécupéré: data });
+//     })
+// })
 
 router.post('/postArticle1', (req, res) => {
     const { categorie, type, model, description, price, sizes9, giSizes9, colors9, photos9, onSale, soldCount } = req.body;
