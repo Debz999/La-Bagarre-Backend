@@ -12,6 +12,16 @@ router.get('/articles', (req, res) => {
 });
 
 
+
+router.get('/articlesHommes1', (req, res) => {
+    const { categorie, type } = req.query; 
+
+    Article.find({ categorie: categorie, type: type}) 
+      .then(data => {
+        res.json({ result: true, articlesHommes: data });
+      });
+});
+
 //http://localhost:3000/articles/articlesHommes
 router.get('/articlesHommes', (req, res) => {
     Article.find({ categorie: "Homme"}).then(data => {
@@ -125,6 +135,13 @@ router.get('/articlesOnSales', (req, res) => {
     });
 });
 
+
+
+router.get('/:id', (req, res) => {
+    Article.findById(req.params.id).then((data) => {
+        res.json({ result: true, articleRécupéré: data });
+    })
+})
 
 
 router.get('/:id', (req, res) => {
