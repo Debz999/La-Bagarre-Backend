@@ -6,7 +6,7 @@ const User = require("../models/users");
 
 /* GET user orders.  */
 //Get user via token, populate orders
-router.get("/:token", function (req, res, next) {
+router.get("/orders/:token", function (req, res, next) {
   User.findOne({ token: req.params.token })
     .populate("orders")
     .then((data) => {
@@ -15,8 +15,8 @@ router.get("/:token", function (req, res, next) {
     });
 });
 
-/* POST  new cart items*/
-router.post("/post/:token", (req, res) => {
+/* POST  orders*/
+router.post("/orders/post/:token", (req, res) => {
   const { quantity, article, totalPayed, address, date, delivery } = req.body;
 
   if (!checkBody(req.body[("address", "date", "delivery")])) {
@@ -34,7 +34,7 @@ router.post("/post/:token", (req, res) => {
         address,
         date,
         delivery,
-        ownerOfCart: user._id,
+        ownerOfOrders: user._id,
       });
       newOrder.save().then((data) => {
         res.json({ result: true, newOrder: data });
@@ -47,7 +47,7 @@ router.post("/post/:token", (req, res) => {
 
     User.findOne({ token: req.params.token }).then((user) => {
       console.log(user);
-      Order.findOne({ ownerOfCart: user._id }).then((orderFromDB) => {
+      Order.findOne({ ownerOfOrders: user._id }).then((orderFromDB) => {
         if (!orderFromDB) {
           createNewOrder(user);
         } else {

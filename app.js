@@ -10,7 +10,7 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var cartsRouter = require('./routes/carts');
 var articlesRouter = require('./routes/articles'); // imports pour utiliser les routes d'articles
-var cartsRouter = require('./routes/orders');
+var ordersRouter = require('./routes/orders');
 
 var app = express();
 const cors = require('cors');
@@ -24,7 +24,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/carts', cartsRouter);
-app.use('/orders', cartsRouter);
+app.use('/orders', ordersRouter);
 
 app.use('/articles', articlesRouter); //
 
