@@ -4,26 +4,38 @@ const { checkBody } = require("../modules/checkBody");
 const Order = require("../models/orders");
 const User = require("../models/users");
 
-/* GET user orders.  */
-//Get user via token, populate orders
-router.get("/orders/:token", function (req, res, next) {
-  User.findOne({ token: req.params.token })
-    .populate("orders")
+
+/*Get all orders, to test */
+router.get("/", function (req, res, next) {
+  Order.find()
     .then((data) => {
       console.log(data);
       res.json({ data });
     });
 });
 
-/* POST  orders*/
-router.post("/orders/post/:token", (req, res) => {
-  const { quantity, article, totalPayed, address, date, delivery } = req.body;
+/* GET user orders.  */
+//returns null, i'll check why later
+router.get("/:token", function (req, res, next) {
+  User.find({token: req.params.token})
+  .then((user) => {
+    console.log(user);
+    Order.findOne({ ownerOfOrders: user._id })
+      .then((data) => {
+        console.log(data);
+        res.json({ data });
+      });
+  })
+});
 
-  if (!checkBody(req.body[("address", "date", "delivery")])) {
+/* POST  orders*/
+router.post("/post/:token", (req, res) => {
+  const { address, date, delivery, quantity, article, totalPayed } = req.body;
+
+  if (!checkBody(req.body, ["address", "date", "delivery", "article", "quantity", "totalPayed"])) {
     res.json({ result: false, error: "Missing or empty fields" });
     return;
   } else {
-    
     function createNewOrder(user) {
       const newOrder = new Order({
         items: {
@@ -41,10 +53,6 @@ router.post("/orders/post/:token", (req, res) => {
       });
     };
 
-    //create edit order function here
-
-
-
     User.findOne({ token: req.params.token }).then((user) => {
       console.log(user);
       Order.findOne({ ownerOfOrders: user._id }).then((orderFromDB) => {
@@ -52,11 +60,20 @@ router.post("/orders/post/:token", (req, res) => {
           createNewOrder(user);
         } else {
           //create an edit order each time the user orders something new
-          //editCart(user);
+          //editOrderStatus(user);
+          console.log('not sure what');
         }
       });
     });
   }
 });
+
+/*PUT order status */ 
+//to do later
+// router.put("/put/:orderId", (req, res) => {
+
+
+// });
+
 
 module.exports = router;
