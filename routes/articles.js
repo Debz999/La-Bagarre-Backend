@@ -1,14 +1,14 @@
-var express = require('express');
+var express = require("express");
 var router = express.Router();
 
-const Article = require('../models/articles');
+const Article = require("../models/articles");
 
 //http://localhost:3000/articles/articles
 //Route pour get tout les articles
-router.get('/articles', (req, res) => {
-    Article.find().then(data => {
-      res.json({ result: true, allArticles: data });
-    });
+router.get("/articles", (req, res) => {
+  Article.find().then((data) => {
+    res.json({ result: true, allArticles: data });
+  });
 });
 
 
@@ -34,116 +34,110 @@ router.get('/articlesSimililaires', (req, res) => {
 })
 
 //http://localhost:3000/articles/articlesHommes
-router.get('/articlesHommes', (req, res) => {
-    Article.find({ categorie: "Homme"}).then(data => {
-      res.json({ result: true, articlesHommes: data });
-    });
+router.get("/articlesHommes", (req, res) => {
+  Article.find({ categorie: "Homme" }).then((data) => {
+    res.json({ result: true, articlesHommes: data });
+  });
 });
 
-        router.get('/articlesHommesGi', (req, res) => {
-            Article.find({ categorie: "Homme", type: "Gi"}).then(data => {
-            res.json({ result: true, articlesHommesGi: data });
-            });
-        });
+router.get("/articlesHommesGi", (req, res) => {
+  Article.find({ categorie: "Homme", type: "Gi" }).then((data) => {
+    res.json({ result: true, articlesHommesGi: data });
+  });
+});
 
-        router.get('/articlesHommesRashguard', (req, res) => {
-            Article.find({ categorie: "Homme", type: "Rashguard"}).then(data => {
-            res.json({ result: true, articlesHommesRashguard: data });
-            });
-        });
+router.get("/articlesHommesRashguard", (req, res) => {
+  Article.find({ categorie: "Homme", type: "Rashguard" }).then((data) => {
+    res.json({ result: true, articlesHommesRashguard: data });
+  });
+});
 
-        router.get('/articlesHommesShort', (req, res) => {
-            Article.find({ categorie: "Homme", type: "Short"}).then(data => {
-            res.json({ result: true, articlesHommesShort: data });
-            });
-        });
+router.get("/articlesHommesShort", (req, res) => {
+  Article.find({ categorie: "Homme", type: "Short" }).then((data) => {
+    res.json({ result: true, articlesHommesShort: data });
+  });
+});
 
-        router.get('/articlesHommesBelt', (req, res) => {
-            Article.find({ categorie: "Homme", type: "Belt"}).then(data => {
-            res.json({ result: true, articlesHommesBelt: data });
-            });
-        });
-
-
+router.get("/articlesHommesBelt", (req, res) => {
+  Article.find({ categorie: "Homme", type: "Belt" }).then((data) => {
+    res.json({ result: true, articlesHommesBelt: data });
+  });
+});
 
 // http://localhost:3000/articles/articlesFemmes
-router.get('/articlesFemmes', (req, res) => {
-    Article.find({ categorie: "Femme"}).then(data => {
-      res.json({ result: true, articlesFemmes: data });
-    });
+router.get("/articlesFemmes", (req, res) => {
+  Article.find({ categorie: "Femme" }).then((data) => {
+    res.json({ result: true, articlesFemmes: data });
+  });
 });
 
-        router.get('/articlesFemmesGi', (req, res) => {
-            Article.find({ categorie: "Femmes", type: "Gi"}).then(data => {
-            res.json({ result: true, articlesFemmesGi: data });
-            });
-        });
+router.get("/articlesFemmesGi", (req, res) => {
+  Article.find({ categorie: "Femmes", type: "Gi" }).then((data) => {
+    res.json({ result: true, articlesFemmesGi: data });
+  });
+});
 
-        router.get('/articlesFemmesRashguard', (req, res) => {
-            Article.find({ categorie: "Femmes", type: "Rashguard"}).then(data => {
-            res.json({ result: true, articlesFemmesRashguard: data });
-            });
-        });
+router.get("/articlesFemmesRashguard", (req, res) => {
+  Article.find({ categorie: "Femmes", type: "Rashguard" }).then((data) => {
+    res.json({ result: true, articlesFemmesRashguard: data });
+  });
+});
 
-        router.get('/articlesFemmesShort', (req, res) => {
-            Article.find({ categorie: "Femmes", type: "Short"}).then(data => {
-            res.json({ result: true, articlesFemmesShort: data });
-            });
-        });
+router.get("/articlesFemmesShort", (req, res) => {
+  Article.find({ categorie: "Femmes", type: "Short" }).then((data) => {
+    res.json({ result: true, articlesFemmesShort: data });
+  });
+});
 
-        router.get('/articlesFemmesBelt', (req, res) => {
-            Article.find({ categorie: "Femmes", type: "Belt"}).then(data => {
-            res.json({ result: true, articlesFemmesBelt: data });
-            });
-        });
-
+router.get("/articlesFemmesBelt", (req, res) => {
+  Article.find({ categorie: "Femmes", type: "Belt" }).then((data) => {
+    res.json({ result: true, articlesFemmesBelt: data });
+  });
+});
 
 //http://localhost:3000/articles/articlesEnfants
-router.get('/articlesEnfants', (req, res) => {
-    Article.find({ categorie: "Enfant"}).then(data => {
-      res.json({ result: true, articlesEnfants: data });
-    });
+router.get("/articlesEnfants", (req, res) => {
+  Article.find({ categorie: "Enfant" }).then((data) => {
+    res.json({ result: true, articlesEnfants: data });
+  });
 });
 
-        router.get('/articlesEnfantsGi', (req, res) => {
-            Article.find({ categorie: "Enfants", type: "Gi"}).then(data => {
-            res.json({ result: true, articlesEnfantsGi: data });
-            });
-        });
+router.get("/articlesEnfantsGi", (req, res) => {
+  Article.find({ categorie: "Enfants", type: "Gi" }).then((data) => {
+    res.json({ result: true, articlesEnfantsGi: data });
+  });
+});
 
-        router.get('/articlesEnfantsRashguard', (req, res) => {
-            Article.find({ categorie: "Enfants", type: "Rashguard"}).then(data => {
-            res.json({ result: true, articlesEnfantsRashguard: data });
-            });
-        });
+router.get("/articlesEnfantsRashguard", (req, res) => {
+  Article.find({ categorie: "Enfants", type: "Rashguard" }).then((data) => {
+    res.json({ result: true, articlesEnfantsRashguard: data });
+  });
+});
 
-        router.get('/articlesEnfantsShort', (req, res) => {
-            Article.find({ categorie: "Enfants", type: "Short"}).then(data => {
-            res.json({ result: true, articlesEnfantsShort: data });
-            });
-        });
+router.get("/articlesEnfantsShort", (req, res) => {
+  Article.find({ categorie: "Enfants", type: "Short" }).then((data) => {
+    res.json({ result: true, articlesEnfantsShort: data });
+  });
+});
 
-        router.get('/articlesEnfantsBelt', (req, res) => {
-            Article.find({ categorie: "Enfants", type: "Belt"}).then(data => {
-            res.json({ result: true, articlesEnfantsBelt: data });
-            });
-        });
-
-
+router.get("/articlesEnfantsBelt", (req, res) => {
+  Article.find({ categorie: "Enfants", type: "Belt" }).then((data) => {
+    res.json({ result: true, articlesEnfantsBelt: data });
+  });
+});
 
 //http://localhost:3000/articles/articlesAccessoires
-router.get('/articlesAccessoires', (req, res) => {
-    Article.find({ categorie: "Accessoire"}).then(data => {
-      res.json({ result: true, articlesAccessoires: data });
-    });
+router.get("/articlesAccessoires", (req, res) => {
+  Article.find({ categorie: "Accessoire" }).then((data) => {
+    res.json({ result: true, articlesAccessoires: data });
+  });
 });
 
-
 //http://localhost:3000/articles/articlesOnSales
-router.get('/articlesOnSales', (req, res) => {
-    Article.find({ onSale: true }).then(data => {
-      res.json({ result: true, articlesOnSales: data });
-    });
+router.get("/articlesOnSales", (req, res) => {
+  Article.find({ onSale: true }).then((data) => {
+    res.json({ result: true, articlesOnSales: data });
+  });
 });
 
 
@@ -161,43 +155,48 @@ router.get('/:id', (req, res) => {
 //     })
 // })
 
-router.post('/postArticle1', (req, res) => {
-    const { categorie, type, model, description, price, sizes9, giSizes9, colors9, photos9, onSale, soldCount } = req.body;
+router.post("/postArticle1", (req, res) => {
+  const {
+    categorie,
+    type,
+    model,
+    description,
+    price,
+    sizes9,
+    giSizes9,
+    colors9,
+    photos9,
+    onSale,
+    soldCount,
+  } = req.body;
 
+  const colorsArray9 = colors9.split(", ");
+  const photosArray9 = photos9.split(", ");
+  const sizesArray9 = sizes9.split(", ");
+  const giSizesArray9 = giSizes9.split(", ");
 
-
-    const colorsArray9 = colors9.split(', ');
-    const photosArray9 = photos9.split(', ');
-    const sizesArray9 = sizes9.split(', ');
-    const giSizesArray9 = giSizes9.split(', ');
-
-
-    const newArticle = new Article({
-        categorie,
-        type,
-        model,
-        description,
-        price,
-        colors9: colorsArray9,
-        photos9: photosArray9,
-        sizes9: sizesArray9,
-        giSizes9: giSizesArray9,
-    });
-    newArticle.save().then(()=> {
-        console.log("Article saved")
-        res.json({ result: true })
-    });
+  const newArticle = new Article({
+    categorie,
+    type,
+    model,
+    description,
+    price,
+    colors9: colorsArray9,
+    photos9: photosArray9,
+    sizes9: sizesArray9,
+    giSizes9: giSizesArray9,
+  });
+  newArticle.save().then(() => {
+    console.log("Article saved");
+    res.json({ result: true });
+  });
 });
-
 
 //FAUDRA AUSSI UNE ROUTE PUT POUR MODIFIER LE soldCount en bdd
 //soldCount++ shai pas si ca marche mdr à test
 //
 
-
-   
 module.exports = router;
-
 
 // //http://localhost:3000/articles/postArticle
 // //Route post pour ajouter des articles en BDD surement accessible depuis un role ADMIN
@@ -222,7 +221,7 @@ module.exports = router;
 //         description,
 //         sizes: sizesArray,
 //         giSizes: giSizesArray,
-//         colors: colorsArray, 
+//         colors: colorsArray,
 //         photos: photosArray,
 //         cardPhoto,
 //         price,

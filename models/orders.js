@@ -12,7 +12,7 @@ const orderSchema = mongoose.Schema({
   address: String,
   date: Date,
   delivery: {type: String, enum: ["Purchased", "Shipped", "Delivered"], default: "Purchased"},
-  ownerOfCart: { type: mongoose.Schema.Types.ObjectId, ref: 'users' },
+  ownerOfOrders: { type: mongoose.Schema.Types.ObjectId, ref: 'users' },
 });
 
 const Order = mongoose.model("orders", orderSchema);
