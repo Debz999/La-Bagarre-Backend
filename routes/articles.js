@@ -22,17 +22,6 @@ router.get('/articlesHommes1', (req, res) => {
       });
 });
 
-//Route articles similaires en cour
-//maarche ap 
-// router.get('/relatedArticles/:categorie', (req, res) => {
-//     const { categorie } = req.params;
-  
-//     // Cherche tous les articles ayant la même catégorie
-//     Article.find({ categorie: categorie })
-//       .then((data) => {
-//         res.json({ result: true, relatedArticles: data });
-//       })
-// })
 
 router.get('/articlesSimililaires', (req, res) => {
     const { categorie, type } = req.query;
