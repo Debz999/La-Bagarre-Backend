@@ -12,13 +12,23 @@ router.get('/articles', (req, res) => {
 });
 
 
+//route pour récuperer tous les articles des catégories (hommes, femmes enfant, accessoires)
+router.get('/articlesC', (req, res) => {
+    const { categorie} = req.query; 
 
-router.get('/articlesHommes1', (req, res) => {
-    const { categorie, type } = req.query; 
+    Article.find({ categorie: categorie}) 
+      .then(data => {
+        res.json({ result: true, articles: data });
+      });
+});
+
+//route pour récueprer les articles des sous catégories (gi,short,rashguard...)
+router.get('/articlesCS', (req, res) => {
+    const { categorie, type} = req.query; 
 
     Article.find({ categorie: categorie, type: type}) 
       .then(data => {
-        res.json({ result: true, articlesHommes: data });
+        res.json({ result: true, articles: data });
       });
 });
 
