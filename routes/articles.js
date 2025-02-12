@@ -13,14 +13,7 @@ router.get('/articles', (req, res) => {
 
 
 
-router.get('/articlesHommes1', (req, res) => {
-    const { categorie, type } = req.query; 
 
-    Article.find({ categorie: categorie, type: type}) 
-      .then(data => {
-        res.json({ result: true, articlesHommes: data });
-      });
-});
 
 
 router.get('/articlesSimililaires', (req, res) => {
