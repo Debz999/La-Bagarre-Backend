@@ -37,11 +37,19 @@ router.get('/articlesSimililaires', (req, res) => {
     const { categorie, type } = req.query;
   
     // Cherche tous les articles ayant la même catégorie
+    if (categorie && type) {
     Article.find({ categorie: categorie, type: type })
       .then((data) => {
-        res.json({ result: true, relatedArticles: data });
+        res.json({ result: true, filteredArticles: data });
       })
+    } else {
+      Article.find({})
+      .then((data) => {
+        res.json({ result: true, filteredArticles: data });
+      })
+    }
 })
+
 
 //http://localhost:3000/articles/articlesHommes
 router.get("/articlesHommes", (req, res) => {
@@ -195,6 +203,8 @@ router.post("/postArticle1", (req, res) => {
     photos9: photosArray9,
     sizes9: sizesArray9,
     giSizes9: giSizesArray9,
+    onSale,
+    soldCount,
   });
   newArticle.save().then(() => {
     console.log("Article saved");
