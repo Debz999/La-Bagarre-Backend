@@ -105,7 +105,7 @@ router.get("/:token", function (req, res, next) {
   });
 });
 
-/*EDIT user */
+/*EDIT user */ //STILL NEEDS TESTING
 router.put("/editadress/:token", (req, res) => {
   const { email, firstname, lastname, number, street, city, zipcode, country } =
     req.body;
