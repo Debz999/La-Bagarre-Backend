@@ -75,7 +75,7 @@ router.put("/addinfo/:token", (req, res) => {
 });
 
 /*Edit user to add a new address */
-router.put("/newadress/:token", (req, res) => {
+router.put("/newaddress/:token", (req, res) => {
   const { number, street, city, zipcode, country } = req.body;
   if (
     !checkBody(req.body, ["number", "street", "city", "zipcode", "country"])
@@ -84,7 +84,7 @@ router.put("/newadress/:token", (req, res) => {
     return;
   }
   User.findOne({ token: req.params.token }).then((userFromDB) => {
-    userFromDB.adress.push({
+    userFromDB.address.push({
       number: number,
       street: street,
       city: city,
@@ -106,7 +106,7 @@ router.get("/:token", function (req, res, next) {
 });
 
 /*EDIT user */ //STILL NEEDS TESTING
-router.put("/editadress/:token", (req, res) => {
+router.put("/editaddress/:token", (req, res) => {
   const { email, firstname, lastname, number, street, city, zipcode, country } =
     req.body;
   User.UpdateOne(
@@ -116,7 +116,7 @@ router.put("/editadress/:token", (req, res) => {
         email: email,
         firstname: firstname,
         lastname: lastname,
-        adress: {
+        address: {
           email: email,
           firstname: firstname,
           lastname: lastname,
@@ -128,6 +128,45 @@ router.put("/editadress/:token", (req, res) => {
       console.log(data);
       res.json({ result: true, data: data });
     });
+  });
+});
+
+//DELETE user's address from DB
+router.delete("/deleteaddress/:token", (req, res) => {
+  const addressId = req.body._id;
+  User.findOne({ token: req.params.token }).then((userFromDB) => {
+    //console.log(userFromDB);
+   if(userFromDB.address.find((e) => e._id == addressId)) {
+    const index = userFromDB.address.findIndex((e) => e.address == addressId)
+    console.log("index", index);
+    userFromDB.address.splice(index, 1);
+    console.log("working")
+   } else {
+    console.log("error")
+   };
+   userFromDB.save().then(() => {
+    res.json({result: true, message: "address deleted"})
+   })
+
+
+    // Cart.findOne({ ownerOfCart: user._id }).then((cartFromDB) => {
+    //   if (cartFromDB.items.find((e) => e.article == articleId)) {
+    //     //console.log(cartFromDB);
+    //     //filter would've worked too with cartFromDB.items = cartFromDB.items.filter...
+    //     const index = cartFromDB.items.findIndex((e) => e.article == articleId);
+    //     console.log("index", index);
+    //     cartFromDB.items.splice(index, 1);
+    //     console.log("working");
+    //   } else {
+    //     console.log("error");
+    //   }
+    //   cartFromDB.save().then(() => {
+    //     res.json({ result: true, message: "cart article removed" });
+    //   });
+    // });
+
+
+
   });
 });
 
