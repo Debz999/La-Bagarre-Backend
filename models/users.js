@@ -8,6 +8,13 @@ zipcode: String,
 country: String
 })
 
+// const paymentSchema = mongoose.Schema({
+//   name: String, 
+//   cardNumber: Number, 
+//   expirationDate: Date,
+//   securityCode: String,
+// });
+
 const userSchema = mongoose.Schema({
   username: String,
   password: String,
@@ -15,8 +22,8 @@ const userSchema = mongoose.Schema({
   token: String,
   firstname: String,
   lastname: String,
-  adress: adressSchema,
-  
+  adress: [adressSchema],
+  //payment: paymentSchema,
 });
 
 const User = mongoose.model('users', userSchema);
