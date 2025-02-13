@@ -74,7 +74,6 @@ router.put("/addinfo/:token", (req, res) => {
   });
 });
 
-
 /*Edit user to add a new address */
 router.put("/newadress/:token", (req, res) => {
   const { number, street, city, zipcode, country } = req.body;
@@ -84,31 +83,52 @@ router.put("/newadress/:token", (req, res) => {
     res.json({ result: false, error: "Missing or empty fields" });
     return;
   }
-  User.findOne({ token: req.params.token })
-    .then((userFromDB) => {
-      userFromDB.adress.push({
-        number: number,
-        street: street,
-        city: city,
-        zipcode: zipcode,
-        country: country,
-      });
-      userFromDB.save()
-      .then(() => {
-        res.json({ result: true, message: "new address added" });
-      });
+  User.findOne({ token: req.params.token }).then((userFromDB) => {
+    userFromDB.adress.push({
+      number: number,
+      street: street,
+      city: city,
+      zipcode: zipcode,
+      country: country,
     });
+    userFromDB.save().then((data) => {
+      res.json({ result: true, message: "new address added", data: data });
+    });
+  });
 });
 
-/*Edit user and edit existing address */
+/* GET user  */
+router.get("/:token", function (req, res, next) {
+  User.findOne({ token: req.params.token }).then((data) => {
+    console.log(data);
+    res.json({ data });
+  });
+});
 
-/*
-
-To create addresses, always push 
-to choose one do a get address by id 
-to edit use the route edit 
-Find user, push address
-
-    */
+/*EDIT user */
+router.put("/editadress/:token", (req, res) => {
+  const { email, firstname, lastname, number, street, city, zipcode, country } =
+    req.body;
+  User.UpdateOne(
+    { token: req.params.token },
+    {
+      $set: {
+        email: email,
+        firstname: firstname,
+        lastname: lastname,
+        adress: {
+          email: email,
+          firstname: firstname,
+          lastname: lastname,
+        },
+      },
+    }
+  ).then(() => {
+    Todo.findOne({ token: req.params.token }).then((data) => {
+      console.log(data);
+      res.json({ result: true, data: data });
+    });
+  });
+});
 
 module.exports = router;

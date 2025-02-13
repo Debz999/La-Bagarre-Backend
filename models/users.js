@@ -8,6 +8,7 @@ zipcode: String,
 country: String
 })
 
+
 // const paymentSchema = mongoose.Schema({
 //   name: String, 
 //   cardNumber: Number, 
