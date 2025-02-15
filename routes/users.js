@@ -67,7 +67,7 @@ router.put("/addinfo/:token", (req, res) => {
       },
     }
   ).then(() => {
-    User.findOne({ token: req.params.token }).then((data) => {
+    User.findOne({ token: req.params.token }).select("-password -_id").then((data) => {
       console.log(data);
       res.json({ result: true, user: data });
     });
@@ -91,15 +91,19 @@ router.put("/newaddress/:token", (req, res) => {
       zipcode: zipcode,
       country: country,
     });
-    userFromDB.save().then((data) => {
-      res.json({ result: true, message: "new address added", data: data });
+    userFromDB.save().then(() => {
+      User.findOne({ token: req.params.token }).select("-password -_id").then((data) => {
+        console.log(data);
+        res.json({ result: true, message: "new address added", data: data });
+  
+      });
     });
   });
 });
 
 /* GET user  */
 router.get("/:token", function (req, res, next) {
-  User.findOne({ token: req.params.token }).then((data) => {
+  User.findOne({ token: req.params.token }).select("-password -_id").then((data) => {
     console.log(data);
     res.json({ data });
   });
@@ -109,7 +113,7 @@ router.get("/:token", function (req, res, next) {
 router.put("/editaddress/:token", (req, res) => {
   const { email, firstname, lastname, number, street, city, zipcode, country } =
     req.body;
-  User.UpdateOne(
+  User.updateOne(
     { token: req.params.token },
     {
       $set: {
@@ -124,7 +128,7 @@ router.put("/editaddress/:token", (req, res) => {
       },
     }
   ).then(() => {
-    Todo.findOne({ token: req.params.token }).then((data) => {
+    User.findOne({ token: req.params.token }).select("-password -_id").then((data) => {
       console.log(data);
       res.json({ result: true, data: data });
     });
