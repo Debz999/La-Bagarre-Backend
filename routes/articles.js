@@ -43,120 +43,120 @@ router.get('/articlesSimililaires', (req, res) => {
 })
 
 
-//http://localhost:3000/articles/articlesHommes
-router.get("/articlesHommes", (req, res) => {
-  Article.find({ categorie: "Homme" }).then((data) => {
-    res.json({ result: true, articlesHommes: data });
-  });
-});
+// //http://localhost:3000/articles/articlesHommes
+// router.get("/articlesHommes", (req, res) => {
+//   Article.find({ categorie: "Homme" }).then((data) => {
+//     res.json({ result: true, articlesHommes: data });
+//   });
+// });
 
-router.get("/articlesHommesGi", (req, res) => {
-  Article.find({ categorie: "Homme", type: "Gi" }).then((data) => {
-    res.json({ result: true, articlesHommesGi: data });
-  });
-});
+// router.get("/articlesHommesGi", (req, res) => {
+//   Article.find({ categorie: "Homme", type: "Gi" }).then((data) => {
+//     res.json({ result: true, articlesHommesGi: data });
+//   });
+// });
 
-router.get("/articlesHommesRashguard", (req, res) => {
-  Article.find({ categorie: "Homme", type: "Rashguard" }).then((data) => {
-    res.json({ result: true, articlesHommesRashguard: data });
-  });
-});
+// router.get("/articlesHommesRashguard", (req, res) => {
+//   Article.find({ categorie: "Homme", type: "Rashguard" }).then((data) => {
+//     res.json({ result: true, articlesHommesRashguard: data });
+//   });
+// });
 
-router.get("/articlesHommesShort", (req, res) => {
-  Article.find({ categorie: "Homme", type: "Short" }).then((data) => {
-    res.json({ result: true, articlesHommesShort: data });
-  });
-});
+// router.get("/articlesHommesShort", (req, res) => {
+//   Article.find({ categorie: "Homme", type: "Short" }).then((data) => {
+//     res.json({ result: true, articlesHommesShort: data });
+//   });
+// });
 
-router.get("/articlesHommesBelt", (req, res) => {
-  Article.find({ categorie: "Homme", type: "Belt" }).then((data) => {
-    res.json({ result: true, articlesHommesBelt: data });
-  });
-});
+// router.get("/articlesHommesBelt", (req, res) => {
+//   Article.find({ categorie: "Homme", type: "Belt" }).then((data) => {
+//     res.json({ result: true, articlesHommesBelt: data });
+//   });
+// });
 
-// http://localhost:3000/articles/articlesFemmes
-router.get("/articlesFemmes", (req, res) => {
-  Article.find({ categorie: "Femme" }).then((data) => {
-    res.json({ result: true, articlesFemmes: data });
-  });
-});
+// // http://localhost:3000/articles/articlesFemmes
+// router.get("/articlesFemmes", (req, res) => {
+//   Article.find({ categorie: "Femme" }).then((data) => {
+//     res.json({ result: true, articlesFemmes: data });
+//   });
+// });
 
-router.get("/articlesFemmesGi", (req, res) => {
-  Article.find({ categorie: "Femmes", type: "Gi" }).then((data) => {
-    res.json({ result: true, articlesFemmesGi: data });
-  });
-});
+// router.get("/articlesFemmesGi", (req, res) => {
+//   Article.find({ categorie: "Femmes", type: "Gi" }).then((data) => {
+//     res.json({ result: true, articlesFemmesGi: data });
+//   });
+// });
 
-router.get("/articlesFemmesRashguard", (req, res) => {
-  Article.find({ categorie: "Femmes", type: "Rashguard" }).then((data) => {
-    res.json({ result: true, articlesFemmesRashguard: data });
-  });
-});
+// router.get("/articlesFemmesRashguard", (req, res) => {
+//   Article.find({ categorie: "Femmes", type: "Rashguard" }).then((data) => {
+//     res.json({ result: true, articlesFemmesRashguard: data });
+//   });
+// });
 
-router.get("/articlesFemmesShort", (req, res) => {
-  Article.find({ categorie: "Femmes", type: "Short" }).then((data) => {
-    res.json({ result: true, articlesFemmesShort: data });
-  });
-});
+// router.get("/articlesFemmesShort", (req, res) => {
+//   Article.find({ categorie: "Femmes", type: "Short" }).then((data) => {
+//     res.json({ result: true, articlesFemmesShort: data });
+//   });
+// });
 
-router.get("/articlesFemmesBelt", (req, res) => {
-  Article.find({ categorie: "Femmes", type: "Belt" }).then((data) => {
-    res.json({ result: true, articlesFemmesBelt: data });
-  });
-});
+// router.get("/articlesFemmesBelt", (req, res) => {
+//   Article.find({ categorie: "Femmes", type: "Belt" }).then((data) => {
+//     res.json({ result: true, articlesFemmesBelt: data });
+//   });
+// });
 
-//http://localhost:3000/articles/articlesEnfants
-router.get("/articlesEnfants", (req, res) => {
-  Article.find({ categorie: "Enfant" }).then((data) => {
-    res.json({ result: true, articlesEnfants: data });
-  });
-});
+// //http://localhost:3000/articles/articlesEnfants
+// router.get("/articlesEnfants", (req, res) => {
+//   Article.find({ categorie: "Enfant" }).then((data) => {
+//     res.json({ result: true, articlesEnfants: data });
+//   });
+// });
 
-router.get("/articlesEnfantsGi", (req, res) => {
-  Article.find({ categorie: "Enfants", type: "Gi" }).then((data) => {
-    res.json({ result: true, articlesEnfantsGi: data });
-  });
-});
+// router.get("/articlesEnfantsGi", (req, res) => {
+//   Article.find({ categorie: "Enfants", type: "Gi" }).then((data) => {
+//     res.json({ result: true, articlesEnfantsGi: data });
+//   });
+// });
 
-router.get("/articlesEnfantsRashguard", (req, res) => {
-  Article.find({ categorie: "Enfants", type: "Rashguard" }).then((data) => {
-    res.json({ result: true, articlesEnfantsRashguard: data });
-  });
-});
+// router.get("/articlesEnfantsRashguard", (req, res) => {
+//   Article.find({ categorie: "Enfants", type: "Rashguard" }).then((data) => {
+//     res.json({ result: true, articlesEnfantsRashguard: data });
+//   });
+// });
 
-router.get("/articlesEnfantsShort", (req, res) => {
-  Article.find({ categorie: "Enfants", type: "Short" }).then((data) => {
-    res.json({ result: true, articlesEnfantsShort: data });
-  });
-});
+// router.get("/articlesEnfantsShort", (req, res) => {
+//   Article.find({ categorie: "Enfants", type: "Short" }).then((data) => {
+//     res.json({ result: true, articlesEnfantsShort: data });
+//   });
+// });
 
-router.get("/articlesEnfantsBelt", (req, res) => {
-  Article.find({ categorie: "Enfants", type: "Belt" }).then((data) => {
-    res.json({ result: true, articlesEnfantsBelt: data });
-  });
-});
+// router.get("/articlesEnfantsBelt", (req, res) => {
+//   Article.find({ categorie: "Enfants", type: "Belt" }).then((data) => {
+//     res.json({ result: true, articlesEnfantsBelt: data });
+//   });
+// });
 
-//http://localhost:3000/articles/articlesAccessoires
-router.get("/articlesAccessoires", (req, res) => {
-  Article.find({ categorie: "Accessoire" }).then((data) => {
-    res.json({ result: true, articlesAccessoires: data });
-  });
-});
+// //http://localhost:3000/articles/articlesAccessoires
+// router.get("/articlesAccessoires", (req, res) => {
+//   Article.find({ categorie: "Accessoire" }).then((data) => {
+//     res.json({ result: true, articlesAccessoires: data });
+//   });
+// });
 
-//http://localhost:3000/articles/articlesOnSales
-router.get("/articlesOnSales", (req, res) => {
-  Article.find({ onSale: true }).then((data) => {
-    res.json({ result: true, articlesOnSales: data });
-  });
-});
+// //http://localhost:3000/articles/articlesOnSales
+// router.get("/articlesOnSales", (req, res) => {
+//   Article.find({ onSale: true }).then((data) => {
+//     res.json({ result: true, articlesOnSales: data });
+//   });
+// });
 
 
 
-router.get('/:id', (req, res) => {
-    Article.findById(req.params.id).then((data) => {
-        res.json({ result: true, articleRécupéré: data });
-    })
-})
+// router.get('/:id', (req, res) => {
+//     Article.findById(req.params.id).then((data) => {
+//         res.json({ result: true, articleRécupéré: data });
+//     })
+// })
 
 
 // router.get('/:id', (req, res) => {
