@@ -3,6 +3,99 @@ var router = express.Router();
 
 const Article = require("../models/articles");
 
+//Il faut tout les champs à changer dans req.body
+//FAUT REFORMATER LES BAILS ICI
+
+//http://localhost:3000/articles/articleUpdate/67acf52e4f0859ebff97531a
+router.put("/articleUpdate/:id", (req, res) => {
+  const { id } = req.params;
+  const updateData = req.body;
+
+  if (updateData.colors9) updateData.colors9 = updateData.colors9.split(", ");
+  if (updateData.photos9) updateData.photos9 = updateData.photos9.split(", ");
+  if (updateData.sizes9) updateData.sizes9 = updateData.sizes9.split(", ");
+  if (updateData.giSizes9)
+    updateData.giSizes9 = updateData.giSizes9.split(", ");
+
+  Article.findById(id)
+    .then((article) => {
+      return Article.findByIdAndUpdate(id, updateData, { new: true }); // { new: false } (par défaut): Retourne l'objet avant la mise à jour.
+    })
+    .then((updatedArticle) => {
+      res.json({ message: "Article mis à jour", updatedArticle });
+    });
+});
+
+router.put("/articleUpdate1/:id", (req, res) => {
+  // const { id } = req.params || req.body.id;
+  const id = req.params.id || req.body.id;
+  const updateData = req.body; //POURQUOI YA REQ.BODY ICI ET DANS L'OBJET EN BAS?
+  const { //ON A RAJOUTER CA CA A DEBLOK LE PROBLEME
+    categorie,
+    type,
+    model,
+    description,
+    price,
+    onSale,
+    soldCount,
+    // categorie,
+    // type,
+    // model,
+    // description,
+    // price,
+    // onSale,
+    // soldCount,
+    // colors9,
+    // photos9,
+    // sizes9,
+    // giSizes9
+  } = req.body;
+
+  const colors9 = updateData.colors9.split(", ");
+  const photos9 = updateData.photos9.split(", ");
+  const sizes9 = updateData.sizes9.split(", ");
+  const giSizes9 = updateData.giSizes9.split(", ");
+  // const colors9Array = colors9 ? colors9.split(", ") : [];
+  // const photos9Array = photos9 ? photos9.split(", ") : [];
+  // const sizes9Array = sizes9 ? sizes9.split(", ") : [];
+  // const giSizes9Array = giSizes9 ? giSizes9.split(", ") : [];
+
+  Article.findById(id)
+    .then((article) => {
+      if (!article) {
+        return res.status(404).json({ message: "Article non trouvé" });
+      }
+      //SANS LA RETURN ICI CA MARCHE PAS
+      return Article.findByIdAndUpdate(//CETTE PARTIE QUI POSAIT PROBLEME, J'AVAIS SEULEMENT id, updateData, new true
+        id,
+        {
+          // colors9: colors9Array,
+          // photos9: photos9Array,
+          // sizes9: sizes9Array,
+          // giSizes9: giSizes9Array,
+          colors9,
+          photos9,
+          sizes9,
+          giSizes9,
+          categorie,
+          type,
+          model,
+          description,
+          price,
+          onSale,
+          soldCount,
+        },
+        { new: true }
+      ); // { new: false } (par défaut): Retourne l'objet avant la mise à jour.
+    })
+    .then((updatedArticle) => {
+      if (!updatedArticle) {
+        return res.status(500).json({ message: "Erreur lors de la mise à jour" });
+      }
+      res.json({ message: "Article mis à jour", updatedArticle });
+    })
+});
+
 //http://localhost:3000/articles/articles
 //Route pour get tout les articles
 router.get("/articles", (req, res) => {
@@ -13,35 +106,29 @@ router.get("/articles", (req, res) => {
 
 
 
-
 //route pour récueprer les articles des categories et sous catégories (gi,short,rashguard...)
 router.get('/articlesCS', (req, res) => {
     const { categorie, type} = req.query; 
 
-    Article.find({ categorie: categorie, type: type}) 
-      .then(data => {
-        res.json({ result: true, articles: data });
-      });
+  Article.find({ categorie: categorie, type: type }).then((data) => {
+    res.json({ result: true, articles: data });
+  });
 });
 
+router.get("/articlesSimililaires", (req, res) => {
+  const { categorie, type } = req.query;
 
-router.get('/articlesSimililaires', (req, res) => {
-    const { categorie, type } = req.query;
-  
-    // Cherche tous les articles ayant la même catégorie
-    if (categorie && type) {
-    Article.find({ categorie: categorie, type: type })
-      .then((data) => {
-        res.json({ result: true, filteredArticles: data });
-      })
-    } else {
-      Article.find({})
-      .then((data) => {
-        res.json({ result: true, filteredArticles: data });
-      })
-    }
-})
-
+  // Cherche tous les articles ayant la même catégorie
+  if (categorie && type) {
+    Article.find({ categorie: categorie, type: type }).then((data) => {
+      res.json({ result: true, filteredArticles: data });
+    });
+  } else {
+    Article.find({}).then((data) => {
+      res.json({ result: true, filteredArticles: data });
+    });
+  }
+});
 
 //http://localhost:3000/articles/articlesHommes
 router.get("/articlesHommes", (req, res) => {
@@ -151,19 +238,14 @@ router.get("/articlesOnSales", (req, res) => {
 });
 
 
+//ROUTE POUR ARTICLE2PAGE
+router.get("/:id", (req, res) => {
+  Article.findById(req.params.id || req.body.id).then((data) => {
+    res.json({ result: true, articleRécupéré: data });
+  });
+});
 
-router.get('/:id', (req, res) => {
-    Article.findById(req.params.id).then((data) => {
-        res.json({ result: true, articleRécupéré: data });
-    })
-})
 
-
-// router.get('/:id', (req, res) => {
-//     Article.findById(req.params.id).then((data) => {
-//         res.json({ result: true, articleRécupéré: data });
-//     })
-// })
 
 router.post("/postArticle1", (req, res) => {
   const {
@@ -210,36 +292,3 @@ router.post("/postArticle1", (req, res) => {
 
 module.exports = router;
 
-// //http://localhost:3000/articles/postArticle
-// //Route post pour ajouter des articles en BDD surement accessible depuis un role ADMIN
-// router.post('/postArticle', (req, res) => {
-//     const { categorie, type, model, description, sizes, giSizes, colors, photos, cardPhoto, price } = req.body;
-
-//     //Bon ca marche mais va falloir expliquer le split et le trim
-//     //Sans ca on a pas des couleurs ou photos en objts individuels
-//     const colorsArray = Array.isArray(colors) ? colors.map(color => ({ colorName0: color })) : colors.split(', ').map(color => ({ colorName0: color.trim() }));
-//     const photosArray = Array.isArray(photos) ? photos.map(photo => ({ photoUrl0: photo })) : photos.split(', ').map(photo => ({ photoUrl0: photo.trim() }));
-//     const sizesArray = Array.isArray(sizes) ? sizes.map(size => ({ size0: size })) : sizes.split(', ').map(size => ({ size0: size.trim() }));
-//     const giSizesArray = Array.isArray(giSizes) ? giSizes.map(giSize => ({ giSize0: giSize })) : giSizes.split(', ').map(giSize => ({ giSize0: giSize.trim() }));
-//         // Vérification : Array.isArray(colors)
-//         // Si colors est déjà un tableau, on le mappe (.map()) en transformant chaque élément en un objet { name: color }.
-//         // Sinon, on suppose que colors est une chaîne de caractères contenant des couleurs séparées par , (exemple : "red, blue, green").
-//         // On utilise .split(', ') pour la découper en un tableau.
-//         // Puis .map(color => ({ name: color.trim() })) crée des objets { name: color }.
-//     const newArticle = new Article({
-//         categorie,
-//         type,
-//         model,
-//         description,
-//         sizes: sizesArray,
-//         giSizes: giSizesArray,
-//         colors: colorsArray,
-//         photos: photosArray,
-//         cardPhoto,
-//         price,
-//     });
-//     newArticle.save().then(()=> {
-//         console.log("Article saved")
-//         res.json({ result: true })
-//     });
-// });
