@@ -11,37 +11,32 @@ router.get("/articles", (req, res) => {
   });
 });
 
-
-
-
 //route pour récueprer les articles des categories et sous catégories (gi,short,rashguard...)
-router.get('/articlesCS', (req, res) => {
-    const { categorie, type} = req.query; 
-
-    Article.find({ categorie: categorie, type: type}) 
-      .then(data => {
-        res.json({ result: true, articles: data });
-      });
+router.get("/articlesCS", (req, res) => {
+  const { categorie, type } = req.query;
+  let filter = { categorie };
+  if (type !== undefined) {
+    filter.type = type;
+  }
+  Article.find(filter).then((data) => {
+    res.json({ result: true, articles: data });
+  });
 });
 
+router.get("/articlesSimililaires", (req, res) => {
+  const { categorie, type } = req.query;
 
-router.get('/articlesSimililaires', (req, res) => {
-    const { categorie, type } = req.query;
-  
-    // Cherche tous les articles ayant la même catégorie
-    if (categorie && type) {
-    Article.find({ categorie: categorie, type: type })
-      .then((data) => {
-        res.json({ result: true, filteredArticles: data });
-      })
-    } else {
-      Article.find({})
-      .then((data) => {
-        res.json({ result: true, filteredArticles: data });
-      })
-    }
+  // Cherche tous les articles ayant la même catégorie
+  if (categorie && type) {
+    Article.find({ categorie: categorie, type: type }).then((data) => {
+      res.json({ result: true, filteredArticles: data });
+    });
+  } else {
+    Article.find({}).then((data) => {
+      res.json({ result: true, filteredArticles: data });
+    });
+  }
 })
-
 
 // //http://localhost:3000/articles/articlesHommes
 // router.get("/articlesHommes", (req, res) => {
@@ -150,14 +145,11 @@ router.get('/articlesSimililaires', (req, res) => {
 //   });
 // });
 
-
-
-// router.get('/:id', (req, res) => {
-//     Article.findById(req.params.id).then((data) => {
-//         res.json({ result: true, articleRécupéré: data });
-//     })
-// })
-
+// router.get("/:id", (req, res) => {
+//   Article.findById(req.params.id).then((data) => {
+//     res.json({ result: true, articleRécupéré: data });
+//   });
+// });
 
 // router.get('/:id', (req, res) => {
 //     Article.findById(req.params.id).then((data) => {
