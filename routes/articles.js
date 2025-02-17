@@ -36,7 +36,7 @@ router.get("/articlesSimililaires", (req, res) => {
       res.json({ result: true, filteredArticles: data });
     });
   }
-});
+})
 
 // //http://localhost:3000/articles/articlesHommes
 // router.get("/articlesHommes", (req, res) => {
