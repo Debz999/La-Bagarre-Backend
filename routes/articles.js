@@ -88,10 +88,13 @@ router.get("/articles", (req, res) => {
 
 
 //route pour récueprer les articles des categories et sous catégories (gi,short,rashguard...)
-router.get('/articlesCS', (req, res) => {
-    const { categorie, type} = req.query; 
-
-  Article.find({ categorie: categorie, type: type }).then((data) => {
+router.get("/articlesCS", (req, res) => {
+  const { categorie, type } = req.query;
+  let filter = { categorie };
+  if (type !== undefined) {
+    filter.type = type;
+  }
+  Article.find(filter).then((data) => {
     res.json({ result: true, articles: data });
   });
 });
@@ -112,12 +115,12 @@ router.get("/articlesSimililaires", (req, res) => {
 });
 
 
-//http://localhost:3000/articles/articlesOnSales
-router.get("/articlesOnSales", (req, res) => {
-  Article.find({ onSale: true }).then((data) => {
-    res.json({ result: true, articlesOnSales: data });
-  });
-});
+// //http://localhost:3000/articles/articlesOnSales
+// router.get("/articlesOnSales", (req, res) => {
+//   Article.find({ onSale: true }).then((data) => {
+//     res.json({ result: true, articlesOnSales: data });
+//   });
+// });
 
 
 //ROUTE POUR ARTICLE2PAGE
