@@ -50,7 +50,7 @@ router.post("/signin", (req, res) => {
   });
 });
 
-/* Edit user to add the rest of the information */
+/* Edit user to add the basic information */
 router.put("/addinfo/:token", (req, res) => {
   const { email, firstname, lastname } = req.body;
   if (!checkBody(req.body, ["email", "firstname", "lastname"])) {
@@ -67,10 +67,12 @@ router.put("/addinfo/:token", (req, res) => {
       },
     }
   ).then(() => {
-    User.findOne({ token: req.params.token }).select("-password -_id").then((data) => {
-      console.log(data);
-      res.json({ result: true, user: data });
-    });
+    User.findOne({ token: req.params.token })
+      .select("-password -_id")
+      .then((data) => {
+        console.log(data);
+        res.json({ result: true, user: data });
+      });
   });
 });
 
@@ -92,21 +94,24 @@ router.put("/newaddress/:token", (req, res) => {
       country: country,
     });
     userFromDB.save().then(() => {
-      User.findOne({ token: req.params.token }).select("-password -_id").then((data) => {
-        console.log(data);
-        res.json({ result: true, message: "new address added", data: data });
-  
-      });
+      User.findOne({ token: req.params.token })
+        .select("-password -_id")
+        .then((data) => {
+          console.log(data);
+          res.json({ result: true, message: "new address added", data: data });
+        });
     });
   });
 });
 
-/* GET user  */
+/* GET user securely */
 router.get("/:token", function (req, res, next) {
-  User.findOne({ token: req.params.token }).select("-password -_id").then((data) => {
-    console.log(data);
-    res.json({ data });
-  });
+  User.findOne({ token: req.params.token })
+    .select("-password -_id")
+    .then((data) => {
+      console.log(data);
+      res.json({ data });
+    });
 });
 
 /*EDIT user */ //STILL NEEDS TESTING
@@ -128,30 +133,33 @@ router.put("/editaddress/:token", (req, res) => {
       },
     }
   ).then(() => {
-    User.findOne({ token: req.params.token }).select("-password -_id").then((data) => {
-      console.log(data);
-      res.json({ result: true, data: data });
-    });
+    User.findOne({ token: req.params.token })
+      .select("-password -_id")
+      .then((data) => {
+        console.log(data);
+        res.json({ result: true, data: data });
+      });
   });
 });
 
-//DELETE user's address from DB
+//DELETE user's address from DB 
 router.delete("/deleteaddress/:token", (req, res) => {
   const addressId = req.body._id;
+  console.log('check del', req.body) //contains addressId: id
   User.findOne({ token: req.params.token }).then((userFromDB) => {
-    //console.log(userFromDB);
-   if(userFromDB.address.find((e) => e._id == addressId)) {
-    const index = userFromDB.address.findIndex((e) => e.address == addressId)
-    console.log("index", index);
-    userFromDB.address.splice(index, 1);
-    console.log("working")
-   } else {
-    console.log("error")
-   };
-   userFromDB.save().then(() => {
-    res.json({result: true, message: "address deleted"})
-   })
-
+    console.log('user', userFromDB.address);
+    if (userFromDB.address.find((e) => e._id == addressId)) {
+      const index = userFromDB.address.findIndex((e) => e.address == addressId);
+      console.log("index", index);
+      userFromDB.address.splice(index, 1);
+      console.log("working");
+      userFromDB.save().then(() => {
+        res.json({ result: true, message: "address deleted" });
+      });
+    } else {
+      console.log("error in del route");
+      res.json({result: false, message: "something went wrong"})
+    }
 
     // Cart.findOne({ ownerOfCart: user._id }).then((cartFromDB) => {
     //   if (cartFromDB.items.find((e) => e.article == articleId)) {
@@ -168,9 +176,6 @@ router.delete("/deleteaddress/:token", (req, res) => {
     //     res.json({ result: true, message: "cart article removed" });
     //   });
     // });
-
-
-
   });
 });
 
