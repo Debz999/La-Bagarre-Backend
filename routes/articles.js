@@ -3,6 +3,20 @@ var router = express.Router();
 
 const Article = require("../models/articles");
 
+const cloudinary = require('cloudinary').v2;
+const fs = require('fs');
+
+const uniqid = require('uniqid');
+
+
+
+
+
+
+
+
+
+
 
 router.put("/articleUpdate1/:id", (req, res) => {
   // const { id } = req.params || req.body.id;
@@ -68,6 +82,8 @@ router.get("/articles", (req, res) => {
 
 //route pour récueprer les articles des categories et sous catégories (gi,short,rashguard...)
 router.get("/articlesCS", (req, res) => {
+  // const categorieLowerCase = categorie.toLowerCase()
+  // const typeLowerCase = type.toLowerCase()
   const { categorie, type } = req.query;
   let filter = { categorie };
   if (type !== undefined) {
@@ -111,7 +127,12 @@ router.get("/:id", (req, res) => {
 
 
 
-router.post("/postArticle1", (req, res) => {
+router.post("/postArticle1", async (req, res) => {
+
+  console.log(req.body)
+  console.log(req.files)
+  // return res.json()
+
   const {
     categorie,
     type,
@@ -131,6 +152,30 @@ router.post("/postArticle1", (req, res) => {
   const sizesArray9 = sizes9.split(", ");
   const giSizesArray9 = giSizes9.split(", ");
 
+ 
+    
+   
+    
+   
+    // res.json({ result: true, url: resultCloudinary.secure_url });
+
+      let resultCloudinary = [];
+      for(const file in req.files) {
+        const photoPath = `./tmp/${uniqid()}.jpg`;
+        const resultMove = await req.files[file].mv(photoPath);
+        if (!resultMove) {
+          let temp = await cloudinary.uploader.upload(photoPath);   
+          resultCloudinary.push(temp.secure_url)   
+          fs.unlinkSync(photoPath);
+        } else {
+          res.json({ result: false, error: resultMove });
+        }
+
+      }
+
+   console.log(resultCloudinary)
+      // return
+
   const newArticle = new Article({
     categorie,
     type,
@@ -138,7 +183,7 @@ router.post("/postArticle1", (req, res) => {
     description,
     price,
     colors9: colorsArray9,
-    photos9: photosArray9,
+    photos9: resultCloudinary,
     sizes9: sizesArray9,
     giSizes9: giSizesArray9,
     onSale,
