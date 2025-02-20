@@ -97,7 +97,7 @@ router.put("/newaddress/:token", (req, res) => {
       User.findOne({ token: req.params.token })
         .select("-password -_id")
         .then((data) => {
-          console.log(data);
+          //console.log(data);
           res.json({ result: true, message: "new address added", data: data });
         });
     });
