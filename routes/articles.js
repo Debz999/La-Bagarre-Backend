@@ -12,13 +12,7 @@ const uniqid = require('uniqid');
 
 
 
-
-
-
-
-
-
-router.put("/articleUpdate1/:id", (req, res) => {
+router.put("/articleUpdate1/:id", async (req, res) => {
   // const { id } = req.params || req.body.id;
   const id = req.params.id || req.body.id;
   const updateData = req.body; //POURQUOI YA REQ.BODY ICI ET DANS L'OBJET EN BAS?
@@ -38,6 +32,21 @@ router.put("/articleUpdate1/:id", (req, res) => {
   const sizes9 = updateData.sizes9.split(", ");
   const giSizes9 = updateData.giSizes9.split(", ");
 
+  let resultCloudinary = []; //Tableau qui va stocker les url
+  for(const file in req.files) { //Boucle sur objet donc for in si j'ai bien compris
+    const photoPath = `./tmp/${uniqid()}.jpg`; //Comme dans le cour pour mettre en place cloudinary
+    const resultMove = await req.files[file].mv(photoPath);//Petite difference ici avec le cour  
+    if (!resultMove) { 
+      let temp = await cloudinary.uploader.upload(photoPath); //Declaration de temp 
+      resultCloudinary.push(temp.secure_url) //push des infos du temp.secure_url vers le taleau resultCloudinary  
+      fs.unlinkSync(photoPath);
+    } else {
+      res.json({ result: false, error: resultMove }); 
+    }
+
+  }
+
+
   Article.findById(id)
     .then((article) => {
       if (!article) {
@@ -48,7 +57,7 @@ router.put("/articleUpdate1/:id", (req, res) => {
         id,
         {
           colors9,
-          photos9,
+          photos9: resultCloudinary,
           sizes9,
           giSizes9,
           categorie,
@@ -109,6 +118,27 @@ router.get("/articlesSimililaires", (req, res) => {
   }
 });
 
+router.get("/articlesSimilaires1", (req, res) => {
+  const { categorie, type } = req.query;
+  let filter = {};
+
+  if (categorie) {
+    filter.categorie = categorie;
+  }
+
+  if (type) {
+    filter.type = type;
+  }
+
+  Article.find(filter)
+    .then((data) => {
+      res.json({ result: true, filteredArticles: data });
+    })
+    .catch((error) => {
+      res.status(500).json({ result: false, message: "Erreur serveur", error });
+    });
+});
+
 
 // //http://localhost:3000/articles/articlesOnSales
 // router.get("/articlesOnSales", (req, res) => {
@@ -151,24 +181,19 @@ router.post("/postArticle1", async (req, res) => {
   const photosArray9 = photos9.split(", ");
   const sizesArray9 = sizes9.split(", ");
   const giSizesArray9 = giSizes9.split(", ");
-
- 
-    
-   
-    
    
     // res.json({ result: true, url: resultCloudinary.secure_url });
 
-      let resultCloudinary = [];
-      for(const file in req.files) {
-        const photoPath = `./tmp/${uniqid()}.jpg`;
-        const resultMove = await req.files[file].mv(photoPath);
-        if (!resultMove) {
-          let temp = await cloudinary.uploader.upload(photoPath);   
-          resultCloudinary.push(temp.secure_url)   
+      let resultCloudinary = []; //Tableau qui va stocker les url
+      for(const file in req.files) { //Boucle sur objet donc for in si j'ai bien compris
+        const photoPath = `./tmp/${uniqid()}.jpg`; //Comme dans le cour pour mettre en place cloudinary
+        const resultMove = await req.files[file].mv(photoPath);//Petite difference ici avec le cour  
+        if (!resultMove) { 
+          let temp = await cloudinary.uploader.upload(photoPath); //Declaration de temp 
+          resultCloudinary.push(temp.secure_url) //push des infos du temp.secure_url vers le taleau resultCloudinary  
           fs.unlinkSync(photoPath);
         } else {
-          res.json({ result: false, error: resultMove });
+          res.json({ result: false, error: resultMove }); 
         }
 
       }
@@ -183,7 +208,7 @@ router.post("/postArticle1", async (req, res) => {
     description,
     price,
     colors9: colorsArray9,
-    photos9: resultCloudinary,
+    photos9: resultCloudinary, //resultCloudinary qui est le tableau qui contient le push du temp.secure_url
     sizes9: sizesArray9,
     giSizes9: giSizesArray9,
     onSale,
