@@ -114,42 +114,45 @@ router.get("/:token", function (req, res, next) {
     });
 });
 
-/*EDIT user */ //STILL NEEDS TESTING
+/*EDIT user */ //STILL NEEDS TESTING DOES NOT WORK !!!!!!!!! hacer lo mismo de arriba con if else ''
 router.put("/editaddress/:token", (req, res) => {
-  const { email, firstname, lastname, number, street, city, zipcode, country } =
-    req.body;
-  User.updateOne(
-    { token: req.params.token },
-    {
-      $set: {
-        email: email,
-        firstname: firstname,
-        lastname: lastname,
-        address: {
-          email: email,
-          firstname: firstname,
-          lastname: lastname,
-        },
-      },
-    }
-  ).then(() => {
-    User.findOne({ token: req.params.token })
-      .select("-password -_id")
-      .then((data) => {
-        console.log(data);
-        res.json({ result: true, data: data });
+  const addressId = req.body._id;
+  console.log("req body", req.body);
+
+  User.findOne({ token: req.params.token }).then((userFromDB) => {
+    const addressToEdit = userFromDB.address.find((e) => e._id == addressId);
+    //console.log('a e',addressToEdit); //address ok
+    if (addressToEdit) {
+      for (let key in req.body) {
+        console.log("key", key);
+        console.log("body", req.body[key]); //undefined, why
+        if (req.body[key] && key !== "") {
+          addressToEdit[key] = req.body[key];
+        }
+      }
+
+      userFromDB.save().then(() => {
+        User.findOne({ token: req.params.token })
+          .select("-password -_id")
+          .then((data) => {
+            console.log(data);
+            res.json({ result: true, message: "address edited", data: data });
+          });
       });
+    } else {
+      res.json({ result: false, message: "nop" });
+    }
   });
 });
 
-//DELETE user's address from DB 
+//DELETE user's address from DB
 router.delete("/deleteaddress/:token", (req, res) => {
   const addressId = req.body._id;
-  console.log('check del', req.body) //contains addressId: id
+  console.log("check del", req.body); //contains addressId: id
   User.findOne({ token: req.params.token }).then((userFromDB) => {
-    console.log('user', userFromDB.address);
+    console.log("user", userFromDB.address);
     if (userFromDB.address.find((e) => e._id == addressId)) {
-      const index = userFromDB.address.findIndex((e) => e.address == addressId);
+      const index = userFromDB.address.findIndex((e) => e._id == addressId);
       console.log("index", index);
       userFromDB.address.splice(index, 1);
       console.log("working");
@@ -158,7 +161,7 @@ router.delete("/deleteaddress/:token", (req, res) => {
       });
     } else {
       console.log("error in del route");
-      res.json({result: false, message: "something went wrong"})
+      res.json({ result: false, message: "something went wrong" });
     }
 
     // Cart.findOne({ ownerOfCart: user._id }).then((cartFromDB) => {
