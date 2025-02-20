@@ -29,43 +29,22 @@ router.get("/:token", function (req, res, next) {
 });
 
 /* POST  orders*/
+//récuperer le contenu du cart via user.token récup le cart => populate = liste article et prix
+// depuis le front adresse, token
+//save le tout puis vider le cart
+
 router.post("/post/:token", (req, res) => {
-  const { address, date, delivery, quantity, article, totalPayed } = req.body;
+ 
 
-  if (!checkBody(req.body, ["address", "date", "delivery", "article", "quantity", "totalPayed"])) {
-    res.json({ result: false, error: "Missing or empty fields" });
-    return;
-  } else {
-    function createNewOrder(user) {
-      const newOrder = new Order({
-        items: {
-          quantity,
-          article,
-          totalPayed,
-        },
-        address,
-        date,
-        delivery,
-        ownerOfOrders: user._id,
-      });
-      newOrder.save().then((data) => {
-        res.json({ result: true, newOrder: data });
-      });
-    };
+  User.findOne({ token: req.params.token }).then((data)=>{
+    Cart.findOne({ownerOfCart: data._id})
+    .populate('item.articles')
+    .then(data =>{
+      res.json({data})
+    })
+  })
 
-    User.findOne({ token: req.params.token }).then((user) => {
-      console.log(user);
-      Order.findOne({ ownerOfOrders: user._id }).then((orderFromDB) => {
-        if (!orderFromDB) {
-          createNewOrder(user);
-        } else {
-          //create an edit order each time the user orders something new
-          //editOrderStatus(user);
-          console.log('not sure what');
-        }
-      });
-    });
-  }
+
 });
 
 /*PUT order status */ 
