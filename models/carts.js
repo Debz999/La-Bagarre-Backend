@@ -2,6 +2,8 @@ const mongoose = require("mongoose");
 
 //sous-document
 const cartItemSchema = mongoose.Schema({
+  size: String, 
+  color: String,
   quantity: Number,
   article: { type: mongoose.Schema.Types.ObjectId, ref: "articles" },
 });

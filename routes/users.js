@@ -114,10 +114,10 @@ router.get("/:token", function (req, res, next) {
     });
 });
 
-/*EDIT user */ //STILL NEEDS TESTING DOES NOT WORK !!!!!!!!! hacer lo mismo de arriba con if else ''
+/*EDIT user */
 router.put("/editaddress/:token", (req, res) => {
   const addressId = req.body._id;
-  console.log("req body", req.body);
+  //console.log("req body", req.body);
 
   User.findOne({ token: req.params.token }).then((userFromDB) => {
     const addressToEdit = userFromDB.address.find((e) => e._id == addressId);
@@ -125,7 +125,6 @@ router.put("/editaddress/:token", (req, res) => {
     if (addressToEdit) {
       for (let key in req.body) {
         console.log("key", key);
-        console.log("body", req.body[key]); //undefined, why
         if (req.body[key] && key !== "") {
           addressToEdit[key] = req.body[key];
         }
