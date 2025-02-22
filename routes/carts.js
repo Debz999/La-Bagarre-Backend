@@ -4,8 +4,7 @@ var router = express.Router();
 const Cart = require("../models/carts");
 const User = require("../models/users");
 
-//HERE INCLUDE USER ADDRESS TO ONLY GET THE PERTNENT CART
-/* GET all carts. */
+/* GET all carts. For testing purposes only, not secure */
 router.get("/", function (req, res, next) {
   Cart.find()
     .populate("items.article")
@@ -38,14 +37,16 @@ router.get("/:token", function (req, res, next) {
 /* POST  new cart items*/
 router.post("/post/:token", (req, res) => {
   const articleId = req.body._id;
-  const quantityNum = req.body.quantity;
+  const {quantity, color, size} = req.body
 
   function createNewCart(user) {
     const newCart = new Cart({
       ownerOfCart: user._id,
       items: [
         {
-          quantity: req.body.quantity,
+          size: size,
+          color: color,
+          quantity: quantity,
           article: req.body._id,
         },
       ],
@@ -63,13 +64,15 @@ router.post("/post/:token", (req, res) => {
         for (let object of userCartDB.items) {
           //console.log('obj', object.article._id)
           if (String(object.article._id) === articleId) {
-            object.quantity = quantityNum;
+            object.quantity = quantity;
+            object.size = size;
+            object.color = color;
             //console.log('q', object.quantity)
           }
         }
       } else {
         //if articlId not found, add article
-        userCartDB.items.push({ quantity: quantityNum, article: articleId });
+        userCartDB.items.push({size: size, color: color, quantity: quantity, article: articleId });
       }
       userCartDB.save().then(() => {
         res.json({ result: true, message: "cart article added" });
@@ -91,7 +94,6 @@ router.post("/post/:token", (req, res) => {
 });
 
 /* DELETE   item from cart using id*/ 
-//check later to see if findIndex doesn't have the same problem as delete in user, e._id instead of e.article, not sure
 
 router.delete("/:token", (req, res) => {
   const articleId = req.body._id;
