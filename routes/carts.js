@@ -94,7 +94,6 @@ router.post("/post/:token", (req, res) => {
 });
 
 /* DELETE   item from cart using id*/ 
-//check later to see if findIndex doesn't have the same problem as delete in user, e._id instead of e.article, not sure
 
 router.delete("/:token", (req, res) => {
   const articleId = req.body._id;
