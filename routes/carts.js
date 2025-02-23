@@ -65,8 +65,7 @@ router.post("/post/:token", (req, res) => {
           //console.log('obj', object.article._id)
           if (String(object.article._id) === articleId) {
             object.quantity = quantity;
-            object.size = size;
-            object.color = color;
+
             //console.log('q', object.quantity)
           }
         }
