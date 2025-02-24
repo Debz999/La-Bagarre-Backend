@@ -33,7 +33,7 @@ router.get("/:token", function (req, res, next) {
 router.post("/post/:token", (req, res) => {
   User.findOne({ token: req.params.token }).then((data) => {
     Cart.findOne({ ownerOfCart: data._id })
-      .populate("items.article")
+      // .populate("items.article")
       .then((data) => {
         res.json({ data });
       });
