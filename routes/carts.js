@@ -37,7 +37,9 @@ router.get("/:token", function (req, res, next) {
 /* POST  new cart items*/
 router.post("/post/:token", (req, res) => {
   const articleId = req.body._id;
-  const {quantity, color, size} = req.body
+  const quantityNum = req.body.quantity;
+  const {sizes, giSizes, colors}=req.body;
+  
 
   function createNewCart(user) {
     const newCart = new Cart({
@@ -48,6 +50,9 @@ router.post("/post/:token", (req, res) => {
           color: color,
           quantity: quantity,
           article: req.body._id,
+          size : req.body.sizes,
+          giSize: req.body.giSizes,
+          color : req.body.color
         },
       ],
     });
