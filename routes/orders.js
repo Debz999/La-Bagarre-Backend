@@ -3,7 +3,7 @@ var router = express.Router();
 const { checkBody } = require("../modules/checkBody");
 const Order = require("../models/orders");
 const User = require("../models/users");
-const Cart = require('../models/carts')
+const Cart = require("../models/carts");
 
 /*Get all orders, to test */
 router.get("/", function (req, res, next) {
@@ -31,12 +31,27 @@ router.get("/:token", function (req, res, next) {
 //save le tout puis vider le cart
 
 router.post("/post/:token", (req, res) => {
-  User.findOne({ token: req.params.token }).then((data) => {
-    Cart.findOne({ ownerOfCart: data._id })
-      // .populate("items.article")
-      .then((data) => {
-        res.json({ data });
+  User.findOne({ token: req.params.token }).then((user) => {
+    Cart.findOne({ ownerOfCart: user._id }).then((data) => {
+      const orderItems = data.items.map((item) => {
+        return {
+          size: data.size,
+          giSize: data.giSize,
+          color: data.color,
+          quantity: data.quantity,
+          article: data._id,
+        };
       });
+      const order = new Order({
+        address: user.address,
+        date: Date,
+        delivery: "Purchased",
+        ownerOfOrders: user._id,
+      });
+      order.save().then(() => {
+        res.json({ result: true, message: "order created" });
+      });
+    });
   });
 });
 

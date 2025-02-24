@@ -1,9 +1,13 @@
 const mongoose = require("mongoose");
 
 const itemsSchema = mongoose.Schema({
-  quantity: Number,
-  article: String,
-  totalPayed: Number,
+ 
+    quantity: Number,
+    size : String,
+    giSize : String,
+    color : String,
+    article: { type: mongoose.Schema.Types.ObjectId, ref: "articles" },
+
 });
 
 
