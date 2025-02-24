@@ -140,12 +140,12 @@ router.get("/articlesSimilaires1", (req, res) => {
 });
 
 
-// //http://localhost:3000/articles/articlesOnSales
-// router.get("/articlesOnSales", (req, res) => {
-//   Article.find({ onSale: true }).then((data) => {
-//     res.json({ result: true, articlesOnSales: data });
-//   });
-// });
+//http://localhost:3000/articles/articlesOnSales
+router.get("/articlesOnSales", (req, res) => {
+  Article.find({ onSale: true }).then((data) => {
+    res.json({ result: true, articlesOnSales: data });
+  });
+});
 
 
 //ROUTE POUR ARTICLE2PAGE
