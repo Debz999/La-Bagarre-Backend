@@ -38,7 +38,7 @@ router.get("/:token", function (req, res, next) {
 router.post("/post/:token", (req, res) => {
   const articleId = req.body._id;
   const quantityNum = req.body.quantity;
-  const {sizes, giSizes, colors}=req.body;
+  const {quantity, color, size} = req.body
   
 
   function createNewCart(user) {
@@ -50,9 +50,6 @@ router.post("/post/:token", (req, res) => {
           color: color,
           quantity: quantity,
           article: req.body._id,
-          size : req.body.sizes,
-          giSize: req.body.giSizes,
-          color : req.body.color
         },
       ],
     });
