@@ -148,6 +148,34 @@ router.get("/articlesOnSales", (req, res) => {
 });
 
 
+router.get('/topArticles1', (req, res) => {
+  const { categorie } = req.query;
+
+  console.log("params recus:", req.query)
+
+  if (!categorie) {
+    return res.status(400).json({ result: false, error: "Categorie requis" });
+  }
+
+  Article.find({ categorie: categorie })
+      .sort({ soldCount: -1 }) // Trie par le nombre de ventes décroissant
+      .limit(10) // On récupère les 10 articles les plus vendus
+      .then((data) => {
+        res.json({ result: true, articleRécupéré: data });
+      });
+
+});
+
+router.get('/topArticles', (req, res) => {
+  Article.find()
+      .sort({ soldCount: -1 }) // Trie par le nombre de ventes décroissant
+      .limit(20) // On récupère les 10 articles les plus vendus
+      .then((data) => {
+        res.json({ result: true, articleRécupéré: data });
+      });
+
+});
+
 //ROUTE POUR ARTICLE2PAGE
 router.get("/:id", (req, res) => {
   Article.findById(req.params.id || req.body.id).then((data) => {
@@ -221,30 +249,11 @@ router.post("/postArticle1", async (req, res) => {
 });
 
 
-// http://localhost:3000/articles/topArticles/Homme
-//`http://localhost:3000/articles/topArticles/${type}`
-router.get('/topArticles/:categorie', async (req, res) => {
-      const { categorie } = req.params;
-      Article.find({ categorie: categorie })
-          .sort({ soldCount: -1 }) // Trie par le nombre de ventes décroissant
-          .limit(10) // On récupère les 10 articles les plus vendus
-          .then((data) => {
-            res.json({ result: true, articleRécupéré: data });
-          });
-
-});
 
 
-router.get('/topArticles1', (req, res) => {
-  const { categorie, type } = req.query;
-  Article.find({ categorie: categorie, type: type })
-      .sort({ soldCount: -1 }) // Trie par le nombre de ventes décroissant
-      .limit(10) // On récupère les 10 articles les plus vendus
-      .then((data) => {
-        res.json({ result: true, articleRécupéré: data });
-      });
 
-});
+
+
 
 module.exports = router;
 
