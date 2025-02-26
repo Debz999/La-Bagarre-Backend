@@ -6,6 +6,7 @@ const itemsSchema = mongoose.Schema({
     size : String,
     giSize : String,
     color : String,
+    price : String,
     article: { type: mongoose.Schema.Types.ObjectId, ref: "articles" },
 
 });
@@ -14,7 +15,10 @@ const itemsSchema = mongoose.Schema({
 const orderSchema = mongoose.Schema({
   items: [itemsSchema],
   address: String,
-  date: Date,
+  date: {
+    type: Date,
+    required: true,
+  },
   delivery: {type: String, enum: ["Purchased", "Shipped", "Delivered"], default: "Purchased"},
   ownerOfOrders: { type: mongoose.Schema.Types.ObjectId, ref: 'users' },
 });
