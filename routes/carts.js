@@ -39,7 +39,7 @@ router.post("/post/:token", (req, res) => {
   const articleId = req.body._id;
   const quantityNum = req.body.quantity;
   const {quantity, color, size, giSize, price} = req.body
-  
+  console.log('price',price)
 
   function createNewCart(user) {
     const newCart = new Cart({
