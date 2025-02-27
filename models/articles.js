@@ -12,6 +12,7 @@ const articleSchema = mongoose.Schema({
 	photos9: [String], // Tableau de chaînes de caractères
     price: Number,
     onSale: Boolean, //Pour pouvoir filtrer les articles en promos seulement //Doit être false par defaut
+    onSalePrice: Number,
     soldCount: Number, 
     //FAUT METTRE DEFAULT FALSE POUR ONSALE     
     //il faut aussi un soldCount pour la catégorie articles les plus vendus

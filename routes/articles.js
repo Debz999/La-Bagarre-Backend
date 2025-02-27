@@ -203,7 +203,13 @@ router.post("/postArticle1", async (req, res) => {
     photos9,
     onSale,
     soldCount,
+    onSalePrice,
   } = req.body;
+
+  // let finalPrice = price;
+  // if (onSale === "true" && onSalePrice) {
+  //   finalPrice = onSalePrice; // Si en promotion, on prend le prix promo
+  // }
 
   const colorsArray9 = colors9.split(", ");
   const photosArray9 = photos9.split(", ");
@@ -234,6 +240,7 @@ router.post("/postArticle1", async (req, res) => {
     type,
     model,
     description,
+    // price,
     price,
     colors9: colorsArray9,
     photos9: resultCloudinary, //resultCloudinary qui est le tableau qui contient le push du temp.secure_url
@@ -241,6 +248,7 @@ router.post("/postArticle1", async (req, res) => {
     giSizes9: giSizesArray9,
     onSale,
     soldCount,
+    onSalePrice,
   });
   newArticle.save().then(() => {
     console.log("Article saved");
