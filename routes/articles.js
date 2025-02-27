@@ -24,7 +24,7 @@ router.put("/articleUpdate1/:id", async (req, res) => {
     price,
     onSale,
     soldCount,
-
+    onSalePrice,
   } = req.body;
 
   const colors9 = updateData.colors9.split(", ");
@@ -67,6 +67,7 @@ router.put("/articleUpdate1/:id", async (req, res) => {
           price,
           onSale,
           soldCount,
+          onSalePrice,
         },
         { new: true }
       ); // { new: false } (par défaut): Retourne l'objet avant la mise à jour.
