@@ -38,8 +38,8 @@ router.get("/:token", function (req, res, next) {
 router.post("/post/:token", (req, res) => {
   const articleId = req.body._id;
   const quantityNum = req.body.quantity;
-  const {sizes, giSizes, colors}=req.body;
-  
+  const {quantity, color, size, giSize, price} = req.body
+  console.log('price',price)
 
   function createNewCart(user) {
     const newCart = new Cart({
@@ -47,12 +47,11 @@ router.post("/post/:token", (req, res) => {
       items: [
         {
           size: size,
+          giSize : giSize,
           color: color,
           quantity: quantity,
           article: req.body._id,
-          size : req.body.sizes,
-          giSize: req.body.giSizes,
-          color : req.body.color
+          price : price,
         },
       ],
     });
@@ -76,7 +75,7 @@ router.post("/post/:token", (req, res) => {
         }
       } else {
         //if articlId not found, add article
-        userCartDB.items.push({size: size, color: color, quantity: quantity, article: articleId });
+        userCartDB.items.push({size: size, color: color, quantity: quantity, article: articleId, price: price });
       }
       userCartDB.save().then(() => {
         res.json({ result: true, message: "cart article added" });

@@ -1,16 +1,24 @@
 const mongoose = require("mongoose");
 
 const itemsSchema = mongoose.Schema({
-  quantity: Number,
-  article: String,
-  totalPayed: Number,
+ 
+    quantity: Number,
+    size : String,
+    giSize : String,
+    color : String,
+    price : Number,
+    article: { type: mongoose.Schema.Types.ObjectId, ref: "articles" },
+
 });
 
 
 const orderSchema = mongoose.Schema({
   items: [itemsSchema],
   address: String,
-  date: Date,
+  date: {
+    type: Date,
+    required: true,
+  },
   delivery: {type: String, enum: ["Purchased", "Shipped", "Delivered"], default: "Purchased"},
   ownerOfOrders: { type: mongoose.Schema.Types.ObjectId, ref: 'users' },
 });

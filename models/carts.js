@@ -2,12 +2,12 @@ const mongoose = require("mongoose");
 
 //sous-document
 const cartItemSchema = mongoose.Schema({
-  size: String, 
-  color: String,
+ 
   quantity: Number,
   size : String,
   giSize : String,
   color : String,
+  price: Number,
   article: { type: mongoose.Schema.Types.ObjectId, ref: "articles" },
 });
 
