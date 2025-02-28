@@ -184,7 +184,11 @@ router.get("/:id", (req, res) => {
   });
 });
 
-
+router.delete("/delete", (req, res) => {
+  Article.findByIdAndDelete(req.body.id).then((deletedArticle) => {
+    res.json({ result: true, message: "Article supprimé", deletedArticle });
+  });
+});
 
 router.post("/postArticle1", async (req, res) => {
 
