@@ -38,8 +38,8 @@ router.get("/:token", function (req, res, next) {
 router.post("/post/:token", (req, res) => {
   const articleId = req.body._id;
   const quantityNum = req.body.quantity;
-  const {quantity, color, size, giSize, price} = req.body
-  console.log('price',price)
+  const { quantity, color, size, giSize, price } = req.body;
+  console.log("price", price);
 
   function createNewCart(user) {
     const newCart = new Cart({
@@ -47,11 +47,11 @@ router.post("/post/:token", (req, res) => {
       items: [
         {
           size: size,
-          giSize : giSize,
+          giSize: giSize,
           color: color,
           quantity: quantity,
           article: req.body._id,
-          price : price,
+          price: price,
         },
       ],
     });
@@ -75,7 +75,13 @@ router.post("/post/:token", (req, res) => {
         }
       } else {
         //if articlId not found, add article
-        userCartDB.items.push({size: size, color: color, quantity: quantity, article: articleId, price: price });
+        userCartDB.items.push({
+          size: size,
+          color: color,
+          quantity: quantity,
+          article: articleId,
+          price: price,
+        });
       }
       userCartDB.save().then(() => {
         res.json({ result: true, message: "cart article added" });
@@ -96,7 +102,30 @@ router.post("/post/:token", (req, res) => {
   });
 });
 
-/* DELETE   item from cart using id*/ 
+/*POST FROM TEMPORARY CART */
+router.post("/postFromTemporary/:token", (req, res) => {
+  console.log('testing FROM T', req.body.temporaryCart[0].article);
+  User.findOne({ token: req.params.token }).then((user) => {
+    const newCart = new Cart({
+      ownerOfCart: user._id,
+      items: req.body.temporaryCart.map((e) => {
+        return {
+          size: e.size,
+          giSize: e.giSize,
+          color: e.color,
+          quantity: e.quantity,
+          article: e.article._id,
+          price: e.price,
+        };
+      }),
+    });
+    newCart.save().then(() => {
+      res.json({ result: true, message: "new Cart created" });
+    });
+  });
+});
+
+/* DELETE   item from cart using id*/
 
 router.delete("/:token", (req, res) => {
   const articleId = req.body._id;
