@@ -76,7 +76,7 @@ router.put("/articleUpdate1/:id", async (req, res) => {
       if (!updatedArticle) {
         return res.status(500).json({ message: "Erreur lors de la mise à jour" });
       }
-      res.json({ message: "Article mis à jour", updatedArticle });
+      res.json({ result: true, message: "Article mis à jour", updatedArticle });
     })
 });
 
