@@ -31,7 +31,7 @@ router.post("/post/:token", (req, res) => {
           price: item.price,
         }));
         const order = new Order({
-          address: String(user.address[0]),
+          address: (user.address[0]),
           date: new Date(),
           delivery: "Purchased",
           ownerOfOrders: user._id,

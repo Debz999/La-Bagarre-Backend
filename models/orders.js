@@ -14,7 +14,7 @@ const itemsSchema = mongoose.Schema({
 
 const orderSchema = mongoose.Schema({
   items: [itemsSchema],
-  address: String,
+  address: Object,
   date: {
     type: Date,
     required: true,
