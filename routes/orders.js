@@ -4,6 +4,7 @@ const { checkBody } = require("../modules/checkBody");
 const Order = require("../models/orders");
 const User = require("../models/users");
 const Cart = require("../models/carts");
+const Article = require("../models/articles");
 
 // /*Get all orders, to test */
 // router.get("/", function (req, res, next) {
@@ -19,6 +20,7 @@ const Cart = require("../models/carts");
 //save le tout puis vider le cart
 
 router.post("/post/:token", (req, res) => {
+  console.log('routeorder', req.body.article)
   User.findOne({ token: req.params.token }).then((user) => {
     Cart.findOne({ ownerOfCart: user._id })
       .then((data) => {
@@ -27,11 +29,12 @@ router.post("/post/:token", (req, res) => {
           giSize: item.giSize,
           color: item.color,
           quantity: item.quantity,
-          article: item._id,
+          article: item.article,
           price: item.price,
+          
         }));
         const order = new Order({
-          address: (user.address[0]),
+          address: user.address[0],
           date: new Date(),
           delivery: "Purchased",
           ownerOfOrders: user._id,
