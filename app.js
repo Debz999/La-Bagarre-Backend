@@ -11,6 +11,7 @@ var usersRouter = require('./routes/users');
 var cartsRouter = require('./routes/carts');
 var articlesRouter = require('./routes/articles'); // imports pour utiliser les routes d'articles
 var ordersRouter = require('./routes/orders');
+var reviewsRouter = require('./routes/reviews')
 
 var app = express();
 const cors = require('cors');
@@ -31,5 +32,7 @@ app.use('/carts', cartsRouter);
 app.use('/orders', ordersRouter);
 
 app.use('/articles', articlesRouter); //
+app.use('/reviews', reviewsRouter);
+
 
 module.exports = app;
