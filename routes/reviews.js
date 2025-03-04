@@ -78,6 +78,8 @@ router.post('/articles/:articleId/reviews', (req, res) => {
         });
 });
 
+
+//Pas eu besoin de lui dans detail articles, on passe par l'article direct vu que c'est sous document les avis
 // Route GET pour récupérer tous les avis d'un article
 //http://localhost:3000/reviews/articles/67c2ebf495c755ab42b6487b/reviews
 router.get('/articles/:articleId/reviews', (req, res) => {
