@@ -26,3 +26,4 @@ module.exports = Article;
 // giSizes: [{ giSize0: String }],
 // colors: [{ colorName0: String }],  // ✅ Chaque couleur est un objet { name: "Rouge" }
 // photos: [{ photoUrl0: String }],   // ✅ Chaque photo est un objet { url: "image1.jpg" }
+//b
