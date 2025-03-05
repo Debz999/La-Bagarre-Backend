@@ -8,6 +8,7 @@ const itemsSchema = mongoose.Schema({
     color : String,
     price : Number,
     article: { type: mongoose.Schema.Types.ObjectId, ref: "articles" },
+    model : String,
 
 });
 

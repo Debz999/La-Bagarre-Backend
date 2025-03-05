@@ -8,6 +8,7 @@ const cartItemSchema = mongoose.Schema({
   giSize : String,
   color : String,
   price: Number,
+ 
   article: { type: mongoose.Schema.Types.ObjectId, ref: "articles" },
 });
 
