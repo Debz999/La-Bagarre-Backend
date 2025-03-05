@@ -180,7 +180,7 @@ router.get('/topArticles', (req, res) => {
 //ROUTE POUR ARTICLE2PAGE
 router.get("/:id", (req, res) => {
   Article.findById(req.params.id || req.body.id)
-  // .populate('reviews.userId', 'username')
+  .populate('reviews.userId', 'username')
   .then((data) => {
     res.json({ result: true, articleRécupéré: data });
   });
