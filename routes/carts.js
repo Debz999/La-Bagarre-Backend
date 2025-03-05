@@ -8,6 +8,7 @@ const User = require("../models/users");
 router.get("/", function (req, res, next) {
   Cart.find()
     .populate("items.article")
+    .select("-ownerOfCart")
     .then((data) => {
       console.log(data);
       res.json({ data });
@@ -27,6 +28,7 @@ router.get("/:token", function (req, res, next) {
     console.log(data);
     Cart.findOne({ ownerOfCart: data._id })
       .populate("items.article")
+      .select("-ownerOfCart")
       .then((data) => {
         console.log(data);
         res.json({ data });

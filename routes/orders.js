@@ -33,6 +33,7 @@ router.post("/post/:token", (req, res) => {
           price: item.price,
           
         }));
+      
         const order = new Order({
           address: req.body.address,
           //address: (user.address[0]), //gisela changed it to save the address from front
@@ -42,8 +43,10 @@ router.post("/post/:token", (req, res) => {
           items: orderItems,
         });
         //gisela added the next three lines
-        order.save().then(() => {
-          res.json({ message: "order saved successfully", order: order });
+        order.save().then((orderSaved) => {
+          const orderEdit = orderSaved.toObject();
+          delete orderEdit.ownerOfOrders;
+          res.json({ message: "order saved successfully", order: orderEdit});
         });
 
       })
@@ -64,6 +67,7 @@ router.get("/:token", function (req, res, next) {
   User.findOne({ token: req.params.token }).then((user) => {
     Order.find({ ownerOfOrders: user._id })
       .populate("items.article")
+      .select("-ownerOfOrders")
       .then((orders) => {
         res.json({ data: orders });
       });
