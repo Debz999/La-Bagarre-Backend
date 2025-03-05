@@ -54,7 +54,9 @@ const Article = require('../models/articles'); // Modèle d'article
 //http://localhost:3000/reviews/articles/67c2ebf495c755ab42b6487b/reviews 
 router.post('/articles/:articleId/reviews', (req, res) => {
     const { articleId } = req.params;
-    const { userId, rating, comment } = req.body;
+    const { token, rating, comment } = req.body;
+    // const userId = req.user.id; // Récupération automatique du userId depuis le token
+
 
     Article.findById(articleId)  // Recherche de l'article dans la base de données
         .then((article) => {
@@ -64,7 +66,7 @@ router.post('/articles/:articleId/reviews', (req, res) => {
             }
 
             // Ajouter l'avis à l'article
-            article.reviews.push({ userId, rating, comment });
+            article.reviews.push({ token, rating, comment });
 
             // Sauvegarder l'article avec le nouvel avis
             return article.save();
