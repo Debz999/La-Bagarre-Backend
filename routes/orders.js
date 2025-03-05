@@ -34,14 +34,18 @@ router.post("/post/:token", (req, res) => {
           
         }));
         const order = new Order({
-          address: user.address[0],
+          address: req.body.address,
+          //address: (user.address[0]), //gisela changed it to save the address from front
           date: new Date(),
           delivery: "Purchased",
           ownerOfOrders: user._id,
           items: orderItems,
         });
-        res.json({ order });
-        return order.save();
+        //gisela added the next three lines
+        order.save().then(() => {
+          res.json({ message: "order saved successfully", order: order });
+        });
+
       })
       .then(() => {
         // Clear the cart after creating the order
