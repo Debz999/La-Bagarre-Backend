@@ -178,13 +178,18 @@ router.get('/topArticles', (req, res) => {
 });
 
 //ROUTE POUR ARTICLE2PAGE
+//http://localhost:3000/articles/:id
 router.get("/:id", (req, res) => {
-  Article.findById(req.params.id || req.body.id)
-  // .populate('reviews.userId', 'username')
+  // Article.findById(req.params.id || req.body.id)
+  Article.findOne({ _id: req.params.id || req.body.id } )
+  .populate('reviews.userId', 'username')
   .then((data) => {
+    console.log(data)
     res.json({ result: true, articleRécupéré: data });
   });
 });
+
+
 
 router.delete("/delete", (req, res) => {
   Article.findByIdAndDelete(req.body.id).then((deletedArticle) => {
