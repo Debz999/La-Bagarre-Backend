@@ -10,11 +10,9 @@ const uniqid = require("uniqid");
 
 //UPDATE ARTICLE - backend only
 router.put("/articleUpdate1/:id", async (req, res) => {
-  // const { id } = req.params || req.body.id;
   const id = req.params.id || req.body.id;
-  const updateData = req.body; //POURQUOI YA REQ.BODY ICI ET DANS L'OBJET EN BAS?
+  const updateData = req.body;
   const {
-    //ON A RAJOUTER CA CA A DEBLOK LE PROBLEME
     categorie,
     type,
     model,
@@ -31,8 +29,9 @@ router.put("/articleUpdate1/:id", async (req, res) => {
   const giSizes9 = updateData.giSizes9.split(", ");
 
   let resultCloudinary = []; //Tableau qui va stocker les url
+
+  //Boucle sur objet donc for in si j'ai bien compris
   for (const file in req.files) {
-    //Boucle sur objet donc for in si j'ai bien compris
     const photoPath = `./tmp/${uniqid()}.jpg`; //Comme dans le cour pour mettre en place cloudinary
     const resultMove = await req.files[file].mv(photoPath); //Petite difference ici avec le cour
     if (!resultMove) {
@@ -49,9 +48,7 @@ router.put("/articleUpdate1/:id", async (req, res) => {
       if (!article) {
         return res.status(404).json({ message: "Article non trouvé" });
       }
-      //SANS LA RETURN ICI CA MARCHE PAS
       return Article.findByIdAndUpdate(
-        //CETTE PARTIE QUI POSAIT PROBLEME, J'AVAIS SEULEMENT id, updateData, new true
         id,
         {
           colors9,
@@ -176,7 +173,7 @@ router.get("/topArticles", (req, res) => {
   Article.find()
     .sort({ soldCount: -1 }) // Trie par le nombre de ventes décroissant
     .select("-reviews.userId")
-    .limit(20) // On récupère les 10 articles les plus vendus
+    .limit(20)
     .then((data) => {
       res.json({ result: true, articleRécupéré: data });
     });
@@ -221,21 +218,15 @@ router.post("/postArticle1", async (req, res) => {
     onSalePrice,
   } = req.body;
 
-  // let finalPrice = price;
-  // if (onSale === "true" && onSalePrice) {
-  //   finalPrice = onSalePrice; // Si en promotion, on prend le prix promo
-  // }
 
   const colorsArray9 = colors9.split(", ");
   const photosArray9 = photos9.split(", ");
   const sizesArray9 = sizes9.split(", ");
   const giSizesArray9 = giSizes9.split(", ");
 
-  // res.json({ result: true, url: resultCloudinary.secure_url });
-
   let resultCloudinary = []; //Tableau qui va stocker les url
   for (const file in req.files) {
-    //Boucle sur objet donc for in si j'ai bien compris
+    //Boucle sur objet donc for in
     const photoPath = `./tmp/${uniqid()}.jpg`; //Comme dans le cour pour mettre en place cloudinary
     const resultMove = await req.files[file].mv(photoPath); //Petite difference ici avec le cour
     if (!resultMove) {
@@ -255,7 +246,6 @@ router.post("/postArticle1", async (req, res) => {
     type,
     model,
     description,
-    // price,
     price,
     colors9: colorsArray9,
     photos9: resultCloudinary, //resultCloudinary qui est le tableau qui contient le push du temp.secure_url
