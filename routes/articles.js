@@ -8,7 +8,8 @@ const fs = require("fs");
 
 const uniqid = require("uniqid");
 
-//UPDATE ARTICLE - backend only
+//UPDATE ARTICLE
+//Utilisée sur le composant AjoutArticleBdd
 router.put("/articleUpdate1/:id", async (req, res) => {
   const id = req.params.id || req.body.id;
   const updateData = req.body;
@@ -69,23 +70,32 @@ router.put("/articleUpdate1/:id", async (req, res) => {
     })
     .then((updatedArticle) => {
       if (!updatedArticle) {
-        return res
-          .status(500)
-          .json({ message: "Erreur lors de la mise à jour" });
+        return res.status(500).json({ message: "Erreur lors de la mise à jour" });
       }
-      res.json({ result: true, message: "Article mis à jour", updatedArticle });
+      res.status(200).json({ result: true, message: "Article mis à jour", updatedArticle });
     });
 });
 
 //http://localhost:3000/articles/articles
-//Route pour get tout les articles - backend only for testing
+//Route pour get tout les articles - Utilisée dans composant AllArticles
 router.get("/articles", (req, res) => {
-  Article.find().then((data) => {
-    res.json({ result: true, allArticles: data });
-  });
+  Article.find()
+    .then((data) => {
+      if (data.length === 0) {
+        return res.status(404).json({ result: false, message: "Aucun article trouvé" });
+      } else {
+        res.status(200).json({ result: true, allArticles: data });
+      }
+    })
+    .catch((error) => {
+      console.error("Erreur lors de la récupération des articles :", error);
+      res.status(500).json({ result: false, message: "Erreur serveur" });
+    });
 });
 
-//route pour récueprer les articles des categories et sous catégories (gi,short,rashguard...)
+
+//route pour récupérer les articles par categories et/ou sous catégories (gi,short,rashguard...)
+//Utilisée dans le composant Article
 router.get("/articlesCS", (req, res) => {
   // const categorieLowerCase = categorie.toLowerCase()
   // const typeLowerCase = type.toLowerCase()
@@ -97,60 +107,81 @@ router.get("/articlesCS", (req, res) => {
   Article.find(filter)
     .select("-reviews.userId")
     .then((data) => {
-      res.json({ result: true, articles: data });
+      if (data.length === 0) {
+        return res.status(404).json({ result: false, message: "Aucun article trouvé pour ces critères" });
+      } else {
+        res.status(200).json({ result: true, articles: data });
+      }
+    })
+    .catch((error) => {
+      console.error("Erreur lors de la récupération des articles :", error);
+      res.status(500).json({ result: false, message: "Erreur serveur" });
     });
 });
 
+
+//Route pour get les articles similaires quand on est sur une page ArticleDetail
+//Utilisée sur la page ArticleDetail
+// router.get("/articlesSimililaires", (req, res) => {
+//   const { categorie, type } = req.query;
+
+//   // Cherche tous les articles ayant la même catégorie
+//   if (categorie && type) {
+//     Article.find({ categorie: categorie, type: type })
+//       .select("-reviews.userId")
+//       .then((data) => {
+//         return res.status(200).json({ result: true, filteredArticles: data });
+//       });
+//   } else {
+//     Article.find({})
+//       .select("-reviews.userId")
+//       .then((data) => {
+//         return res.json({ result: true, filteredArticles: data });
+//       });
+//   }
+// });
+
+//http://localhost:3000/articles/articlesSimilaires
 router.get("/articlesSimililaires", (req, res) => {
   const { categorie, type } = req.query;
 
   // Cherche tous les articles ayant la même catégorie
-  if (categorie && type) {
+  if (!categorie && !type) {
+    return res.status(400).json({ result: false, message: "Catégorie et/ou type manquant"})
+  } else {
     Article.find({ categorie: categorie, type: type })
       .select("-reviews.userId")
       .then((data) => {
-        res.json({ result: true, filteredArticles: data });
-      });
-  } else {
-    Article.find({})
-      .select("-reviews.userId")
-      .then((data) => {
-        res.json({ result: true, filteredArticles: data });
+        return res.status(200).json({ result: true, filteredArticles: data });
+      })
+      .catch((error) => {
+        console.error("Erreur lors de la récupération des articles similaires :", error);
+        return res.status(500).json({ result: false, message: "Erreur serveur" });
       });
   }
+
 });
 
-router.get("/articlesSimilaires1", (req, res) => {
-  const { categorie, type } = req.query;
-  let filter = {};
 
-  if (categorie) {
-    filter.categorie = categorie;
-  }
-
-  if (type) {
-    filter.type = type;
-  }
-
-  Article.find(filter)
-    .select("-reviews.userId")
-    .then((data) => {
-      res.json({ result: true, filteredArticles: data });
-    })
-    .catch((error) => {
-      res.status(500).json({ result: false, message: "Erreur serveur", error });
-    });
-});
 
 //http://localhost:3000/articles/articlesOnSales
+//Route pour get les articles en promotions
+//Utilisée dans le composant ArticlesOnSale
 router.get("/articlesOnSales", (req, res) => {
   Article.find({ onSale: true })
     .select("-reviews.userId")
     .then((data) => {
-      res.json({ result: true, articlesOnSales: data });
+      res.status(200).json({ result: true, articlesOnSales: data });
+    })
+    .catch((error) => {
+      console.error("Erreur lors de la récupération des articles :", error);
+      return res.status(500).json({ result: false, message: "Erreur serveur" });
     });
 });
 
+
+//Route pour get les articles les plus vendus
+//Utilisée dans le composant TopArticlesCat
 router.get("/topArticles1", (req, res) => {
   const { categorie } = req.query;
 
@@ -165,29 +196,55 @@ router.get("/topArticles1", (req, res) => {
     .select("-reviews.userId")
     .limit(10) // On récupère les 10 articles les plus vendus
     .then((data) => {
-      res.json({ result: true, articleRécupéré: data });
+      if (data.length === 0) {
+        return res.status(404).json({result: false, message: "Aucun article trouvé pour cette catégorie" });
+      } else {
+        return res.status(200).json({ result: true, articleRécupéré: data });
+      }
+    })
+    .catch((error) => {
+      console.error("Erreur lors de la récupération des articles :", error);
+      return res.status(500).json({ result: false, message: "Erreur serveur" });
     });
 });
 
+
+//Route pour get tout les articles en promotions
+//Utilisée dans le composant TopArticlesAll
 router.get("/topArticles", (req, res) => {
   Article.find()
     .sort({ soldCount: -1 }) // Trie par le nombre de ventes décroissant
     .select("-reviews.userId")
     .limit(20)
     .then((data) => {
-      res.json({ result: true, articleRécupéré: data });
+      if (data.length === 0) {
+        return res.status(404).json({ result: false, message: "Aucun article trouvé" });
+      } else {
+        return res.status(200).json({ result: true, articleRécupéré: data });
+      }
+    })
+    .catch((error) => {
+      console.error("Erreur lors de la récupération des articles :", error);
+      return res.status(500).json({ result: false, message: "Erreur serveur" });
     });
 });
 
-//ROUTE POUR ARTICLE2PAGE
+//ROUTE POUR ArticleDetail
 //http://localhost:3000/articles/:id
 router.get("/:id", (req, res) => {
   // Article.findById(req.params.id || req.body.id)
   Article.findOne({ _id: req.params.id || req.body.id })
     .populate("reviews.userId", "username")
     .then((data) => {
-      console.log(data);
-      res.json({ result: true, articleRécupéré: data });
+      if (data.length === 0) {
+        return res.status(404).json({result: false, message: "Aucun article trouvé pour cette catégorie" });
+      } else {
+        return res.status(200).json({ result: true, articleRécupéré: data });
+      }
+    })
+    .catch((error) => {
+      console.error("Erreur lors de la récupération des articles :", error);
+      return res.status(500).json({result: false,message: "Erreur serveur" });
     });
 });
 
@@ -197,7 +254,8 @@ router.delete("/delete", (req, res) => {
   });
 });
 
-//CREATE NEW ARTICLE - backend only
+//CREATE NEW ARTICLE
+//Utilisée sur le composant AjoutArticleBdd
 router.post("/postArticle1", async (req, res) => {
   console.log(req.body);
   console.log(req.files);
@@ -217,7 +275,6 @@ router.post("/postArticle1", async (req, res) => {
     soldCount,
     onSalePrice,
   } = req.body;
-
 
   const colorsArray9 = colors9.split(", ");
   const photosArray9 = photos9.split(", ");
@@ -255,10 +312,15 @@ router.post("/postArticle1", async (req, res) => {
     soldCount,
     onSalePrice,
   });
-  newArticle.save().then(() => {
-    console.log("Article saved");
-    res.json({ result: true });
+  newArticle.save().then((data) => {
+    if(!data) {
+      return res.status(500).json({ result: false, message: "Erreur lors de l'enregistrement de l'article." });
+    } else {
+      console.log("Article saved:", data)
+      return res.status(200).json({ result: true, "Article enregistré: ": data })
+    }
+  })
   });
-});
+
 
 module.exports = router;

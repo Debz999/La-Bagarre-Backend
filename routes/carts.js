@@ -104,6 +104,7 @@ router.post("/post/:token", (req, res) => {
   });
 });
 
+//Créer un panier permanent à partir d'un panier temporaire et du token utilisateur
 /*POST FROM TEMPORARY CART */
 router.post("/postFromTemporary/:token", (req, res) => {
   console.log('testing FROM T', req.body.temporaryCart[0].article);
