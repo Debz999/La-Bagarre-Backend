@@ -235,9 +235,10 @@ router.get("/:id", (req, res) => {
   // Article.findById(req.params.id || req.body.id)
   Article.findOne({ _id: req.params.id || req.body.id })
     .populate("reviews.userId", "username")
+    .select("-reviews.userId")
     .then((data) => {
       if (data.length === 0) {
-        return res.status(404).json({result: false, message: "Aucun article trouvé pour cette catégorie" });
+        return res.status(404).json({result: false, message: "Aucun article trouvé" });
       } else {
         return res.status(200).json({ result: true, articleRécupéré: data });
       }
@@ -247,6 +248,11 @@ router.get("/:id", (req, res) => {
       return res.status(500).json({result: false,message: "Erreur serveur" });
     });
 });
+
+
+
+
+
 
 router.delete("/delete", (req, res) => {
   Article.findByIdAndDelete(req.body.id).then((deletedArticle) => {

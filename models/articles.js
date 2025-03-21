@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 const reviewSchema = mongoose.Schema({
     userId: { type: mongoose.Schema.Types.ObjectId, ref: 'users' },  // Référence à l'utilisateur qui laisse l'avis
+    // token: { type: String, required: true },
     rating: { type: Number, min: 1, max: 5 },  // Note de l'avis (1 à 5)
     comment: { type: String },  // Commentaire de l'avis
     date: { type: Date, default: Date.now }  // Date de l'avis

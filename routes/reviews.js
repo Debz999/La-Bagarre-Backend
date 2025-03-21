@@ -22,7 +22,7 @@ router.post("/articles/:articleId/reviews", (req, res) => {
     Article.findById(articleId) // Recherche de l'article dans la base de données
       .then((article) => {
         if (!article) {
-          return res.status(404).send("Article non trouvé");
+          return res.status(404).json({ result: false, message: "Article non trouvé" });
         }
 
         // Ajouter l'avis à l'article
@@ -37,10 +37,7 @@ router.post("/articles/:articleId/reviews", (req, res) => {
         return article.save();
       })
       .then((updatedArticle) => {
-        res.status(200).json({
-          message: "Avis ajouté avec succès !",
-          article: updatedArticle, // On renvoie l'article mis à jour avec les reviews
-        });
+        res.status(200).json({message: "Avis ajouté avec succès !", article: updatedArticle });  // On renvoie l'article mis à jour avec les reviews
       })
       .catch((error) => {
         console.error(error);
@@ -85,24 +82,26 @@ router.get("/articles/:articleId/reviews", (req, res) => {
 //         })
 // });
 
+
+
 router.delete("/articles/:articleId/reviews/:reviewId", (req, res) => {
   const { articleId, reviewId } = req.params;
-  const { token, reviewUserId } = req.body; // Récupération du token et de l'ID de l'utilisateur du body.
+  const { token, reviewUserId } = req.body;
 
-  // Étape 1 : Trouver l'utilisateur à partir du token
+  let tokenUser;
+
+  // Étape 1 : Trouver l'utilisateur
   User.findOne({ token: token })
-    .then((profilTrouve) => {
-      if (!tokenUser) {
-        return res
-          .status(401)
-          .json({ message: "Utilisateur non trouvé ou token invalide." });
+    .then((user) => {
+      if (!user) {
+        return res.status(401).json({ result: false, message: "Utilisateur non trouvé ou token invalide." }); //401 = token invalide ou utilisateur pas identifié
       }
 
-      // Étape 2 : Vérifier si l'ID de l'utilisateur du body correspond à l'utilisateur authentifié
-      if (tokenUser._id !== reviewUserId) {
-        return res
-          .status(403)
-          .json({ message: "Vous n'êtes pas autorisé à supprimer cet avis." });
+      tokenUser = user; // on le stocke pour la suite
+
+      // Étape 2 : Vérifier que l'utilisateur est bien l'auteur de l'avis
+      if (tokenUser._id.toString() !== reviewUserId) {
+        return res.status(403).json({ result: false, message: "Vous n'êtes pas autorisé à supprimer cet avis." }); //403 = n'a pas les permissions necessaires
       }
 
       // Étape 3 : Trouver l'article
@@ -110,16 +109,15 @@ router.delete("/articles/:articleId/reviews/:reviewId", (req, res) => {
     })
     .then((article) => {
       if (!article) {
-        return res.status(404).json({ message: "Article non trouvé." });
+        return res.status(404).json({ result: false, message: "Article non trouvé." });
       }
 
-      // Étape 4 : Trouver l'avis à supprimer
       const review = article.reviews.find(
         (review) => review._id.toString() === reviewId
       );
 
       if (!review) {
-        return res.status(404).json({ message: "Avis non trouvé." });
+        return res.status(404).json({ result: false, message: "Avis non trouvé." });
       }
 
       // Étape 5 : Supprimer l'avis
@@ -129,14 +127,16 @@ router.delete("/articles/:articleId/reviews/:reviewId", (req, res) => {
 
       return article.save();
     })
-    .then(() => {
-      res.status(200).json({ message: "Avis supprimé avec succès !" });
+    .then((savedArticle) => {
+      if (savedArticle) {
+        return res.status(200).json({ result: true, message: "Avis supprimé avec succès" });
+      }
     })
     .catch((err) => {
       console.error(err);
-      res
-        .status(500)
-        .json({ message: "Erreur serveur lors de la suppression de l'avis." });
+      if (!res.headersSent) {
+        res.status(500).json({ result: false, message: "Erreur serveur lors de la suppression de l'avis." });
+      }
     });
 });
 
