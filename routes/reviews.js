@@ -30,6 +30,7 @@ router.post("/articles/:articleId/reviews", (req, res) => {
           rating,
           comment,
           userId: user._id,
+          user: user.token,
           date: new Date(),
         });
 
@@ -57,36 +58,11 @@ router.get("/articles/:articleId/reviews", (req, res) => {
   });
 });
 
-// Route DELETE pour supprimer un avis d'un article
-//http://localhost:3000/reviews/articles/67c2ebf495c755ab42b6487b/reviews/67c61064f6d63c0242b810a6
-// router.delete('/articles/:articleId/reviews/:reviewId', (req, res) => {
-//     const { articleId, reviewId } = req.params;
-//     const {token, reviewUserId} = req.body;
-
-//     User.findOne({ token: token })
-//     .then((tokenUser) => {
-
-//     })
-
-//     Article.findById(articleId)
-//         .then((article) => {
-//             console.log("article du delete reviews:", article)
-//             // res.json({article})
-//             article.reviews = article.reviews.filter(
-//                 (review) => review._id.toString() !== reviewId
-//             );
-//             return article.save();
-//         })
-//         .then(() => {
-//             res.status(200).json({ message: 'Avis supprimé avec succès !' });  // Réponse sous forme d'objet
-//         })
-// });
-
 
 
 router.delete("/articles/:articleId/reviews/:reviewId", (req, res) => {
   const { articleId, reviewId } = req.params;
-  const { token, reviewUserId } = req.body;
+  const { token, reviewUserId , reviewUserIdToken} = req.body;
 
   let tokenUser;
 
@@ -99,8 +75,10 @@ router.delete("/articles/:articleId/reviews/:reviewId", (req, res) => {
 
       tokenUser = user; // on le stocke pour la suite
 
+      // console.log("tokenUser", tokenUser)
+
       // Étape 2 : Vérifier que l'utilisateur est bien l'auteur de l'avis
-      if (tokenUser._id.toString() !== reviewUserId) {
+      if (tokenUser.token !== reviewUserIdToken) {
         return res.status(403).json({ result: false, message: "Vous n'êtes pas autorisé à supprimer cet avis." }); //403 = n'a pas les permissions necessaires
       }
 

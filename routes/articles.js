@@ -234,7 +234,8 @@ router.get("/topArticles", (req, res) => {
 router.get("/:id", (req, res) => {
   // Article.findById(req.params.id || req.body.id)
   Article.findOne({ _id: req.params.id || req.body.id })
-    .populate("reviews.userId", "username")
+    .populate('reviews.userId', 'token username -_id')  // Exclure le champ "_id" du userId
+    // .populate("reviews.userId", "username")
     .select("-reviews.userId")
     .then((data) => {
       if (data.length === 0) {
